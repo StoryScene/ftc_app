@@ -31,23 +31,21 @@ public class ThreeMotors extends OpMode {
 
         motorTwo.setPower(gamepad1.right_stick_y);
 
-        if (gamepad1.a == true){
-            motorTres.setPower(.25);
+        if (gamepad1.a){
+            motorTres.setPower(.3);
         }
-        else if (gamepad1.a == false){
-            motorTres.setPower(0);
-        }
-        if (gamepad1.b == true){
+
+        else if (gamepad1.b){
             motorTres.setPower(-.25);
         }
-        else if (gamepad1.b == false){
+        else{
             motorTres.setPower(0);
         }
 
         telemetry.addData("right stick",gamepad1.right_stick_y);
         telemetry.addData("left stick",gamepad1.left_stick_y);
-        telemetry.addData("right bumper",gamepad1.right_bumper);
-        telemetry.addData("left bumper",gamepad1.left_bumper);
+        telemetry.addData("a",gamepad1.a);
+        telemetry.addData("b",gamepad1.b);
 
     }
 }
