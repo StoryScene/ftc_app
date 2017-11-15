@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 /**
@@ -12,12 +13,14 @@ public class MecAndArm extends OpMode {
 
     DcMotor lf, rf, lb, rb;
     DcMotor motorOne, motorTwo, motorTres;
+    Servo servo;
 
     @Override
     public void init() {
         motorOne = hardwareMap.dcMotor.get("one");
         motorTwo = hardwareMap.dcMotor.get("two");
         motorTres = hardwareMap.dcMotor.get("three");
+        servo = hardwareMap.servo.get("servo");
 
         mechanumInit();
 
@@ -42,6 +45,12 @@ public class MecAndArm extends OpMode {
         }
         else{
             motorTres.setPower(0);
+        }
+        if (gamepad2.x){
+            servo.setPosition(1);
+        }
+        if (gamepad2.y){
+            servo.setPosition(0);
         }
 
 
