@@ -1,13 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
 /**
  * Created by Emma on 11/13/17.
  */
-
+@TeleOp
 public class MechanumDrive extends OpMode {
 
     DcMotor lf, rf, lb, rb;

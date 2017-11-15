@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
 /**
  * Created by Kit Caldwell on 11/14/2017.
  */
-
+@TeleOp
 public class FourServosOrTwoServos extends OpMode{
 
     Servo one, two, three, four;
