@@ -17,7 +17,7 @@ public class MecanumTest1617 extends OpMode {
     public GamepadV2 pad1 = new GamepadV2();
 
     public void init(){
-
+        //hi
         frontLeft = hardwareMap.dcMotor.get("frontLeft");
         frontRight = hardwareMap.dcMotor.get("frontRight");
         backLeft = hardwareMap.dcMotor.get("backLeft");
