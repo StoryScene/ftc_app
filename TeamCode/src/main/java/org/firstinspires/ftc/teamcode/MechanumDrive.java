@@ -51,7 +51,7 @@ public class MechanumDrive extends OpMode {
 
 
     private void mechanumLoop() {
-        double x = Range.clip(gamepad1.left_stick_x, -1, 1);
+        double x = - Range.clip(gamepad1.left_stick_x, -1, 1);
         double y = Range.clip(gamepad1.left_stick_y, -1, 1);
 
         if (Math.abs(x) < 0.1) {
@@ -90,10 +90,10 @@ public class MechanumDrive extends OpMode {
         vlb /= maxPower;
         vrb /= maxPower;
 
-        lf.setPower(POW * Range.clip(vlf, -1, 1));
-        rf.setPower(-POW * Range.clip(vrf, -1, 1));
-        lb.setPower(POW * Range.clip(vlb, -1, 1));
-        rb.setPower(-POW * Range.clip(vrb, -1, 1));
+        lf.setPower(Math.pow(POW,2) * Range.clip(vlf, -1, 1));
+        rf.setPower(-Math.pow(POW,2) * Range.clip(vrf, -1, 1));
+        lb.setPower(Math.pow(POW,2) * Range.clip(vlb, -1, 1));
+        rb.setPower(-Math.pow(POW,2) * Range.clip(vrb, -1, 1));
 
 
         telemetry.addData("maxPower: ", maxPower);
