@@ -42,16 +42,31 @@ public class MechanumDrive extends OpMode {
         rf = hardwareMap.dcMotor.get("rightF");
         lb = hardwareMap.dcMotor.get("leftB");
         rb = hardwareMap.dcMotor.get("rightB");
+
+        lf.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rf.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        lb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
 
     private void mechanumLoop() {
         double x = Range.clip(gamepad1.left_stick_x, -1, 1);
         double y = Range.clip(gamepad1.left_stick_y, -1, 1);
+
+        if (Math.abs(x) < 0.1) {
+            x = 0;
+        }
+        if (Math.abs(y) < 0.1) {
+            x = 0;
+        }
+
         double rot = Range.clip(gamepad1.right_stick_x, -1, 1);
 
         double r = Math.hypot(x, y);
         double angle = 0.0;
+
+        double POW = Math.max(Math.hypot(x, y), Math.abs(rot));
 
 
         if (r > 0.1){
@@ -75,10 +90,11 @@ public class MechanumDrive extends OpMode {
         vlb /= maxPower;
         vrb /= maxPower;
 
-        lf.setPower(Range.clip(vlf, -1, 1));
-        rf.setPower(-Range.clip(vrf, -1, 1));
-        lb.setPower(Range.clip(vlb, -1, 1));
-        rb.setPower(-Range.clip(vrb, -1, 1));
+        lf.setPower(POW * Range.clip(vlf, -1, 1));
+        rf.setPower(-POW * Range.clip(vrf, -1, 1));
+        lb.setPower(POW * Range.clip(vlb, -1, 1));
+        rb.setPower(-POW * Range.clip(vrb, -1, 1));
+
 
         telemetry.addData("maxPower: ", maxPower);
     }
