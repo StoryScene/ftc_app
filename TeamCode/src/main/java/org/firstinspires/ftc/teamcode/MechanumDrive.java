@@ -76,9 +76,9 @@ public class MechanumDrive extends OpMode {
         vrb /= maxPower;
 
         lf.setPower(Range.clip(vlf, -1, 1));
-        rf.setPower(Range.clip(vrf, -1, 1));
+        rf.setPower(-Range.clip(vrf, -1, 1));
         lb.setPower(Range.clip(vlb, -1, 1));
-        rb.setPower(Range.clip(vrb, -1, 1));
+        rb.setPower(-Range.clip(vrb, -1, 1));
 
         telemetry.addData("maxPower: ", maxPower);
     }
