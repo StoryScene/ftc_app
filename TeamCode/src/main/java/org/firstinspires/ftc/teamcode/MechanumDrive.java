@@ -60,7 +60,7 @@ public class MechanumDrive extends OpMode {
 
     private void mechanumLoop() {
         pad1.update(gamepad1);
-        double x = - Range.clip(gamepad1.left_stick_x, -1, 1);
+        double x = Range.clip(gamepad1.left_stick_x, -1, 1);
         double y = - Range.clip(gamepad1.left_stick_y, -1, 1);
 
         if (Math.abs(x) < 0.1) {
