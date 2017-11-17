@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.modules.GamepadV2;
+
 /**
  * Created by Emma on 11/13/17.
  */
@@ -13,6 +15,7 @@ import com.qualcomm.robotcore.util.Range;
 public class MechanumDrive extends OpMode {
 
     DcMotor lf, rf, lb, rb;
+    public GamepadV2 pad1 = new GamepadV2();
 
 
     @Override
@@ -43,6 +46,11 @@ public class MechanumDrive extends OpMode {
         lb = hardwareMap.dcMotor.get("leftB");
         rb = hardwareMap.dcMotor.get("rightB");
 
+        lf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         lf.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rf.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         lb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -51,14 +59,15 @@ public class MechanumDrive extends OpMode {
 
 
     private void mechanumLoop() {
+        pad1.update(gamepad1);
         double x = - Range.clip(gamepad1.left_stick_x, -1, 1);
-        double y = Range.clip(gamepad1.left_stick_y, -1, 1);
+        double y = - Range.clip(gamepad1.left_stick_y, -1, 1);
 
         if (Math.abs(x) < 0.1) {
             x = 0;
         }
         if (Math.abs(y) < 0.1) {
-            x = 0;
+            y = 0;
         }
 
         double rot = Range.clip(gamepad1.right_stick_x, -1, 1);
