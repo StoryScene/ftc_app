@@ -4,8 +4,10 @@ package org.firstinspires.ftc.teamcode; /**
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.modules.GamepadV2;
 import org.firstinspires.ftc.teamcode.modules.MecanumDrive1617;
@@ -14,6 +16,8 @@ import org.firstinspires.ftc.teamcode.modules.MecanumDrive1617;
 public class MecanumTest1617 extends OpMode {
 
     public DcMotor frontLeft, frontRight, backLeft, backRight;
+    public Servo servo1, servo2, servo4;
+    public CRServo servo3;
     public GamepadV2 pad1 = new GamepadV2();
 
     public void init(){
@@ -22,6 +26,11 @@ public class MecanumTest1617 extends OpMode {
         frontRight = hardwareMap.dcMotor.get("frontRight");
         backLeft = hardwareMap.dcMotor.get("backLeft");
         backRight = hardwareMap.dcMotor.get("backRight");
+
+        servo1 = hardwareMap.servo.get("one");
+        servo2 = hardwareMap.servo.get("two");
+        servo3 = hardwareMap.crservo.get("three");
+        servo4 = hardwareMap.servo.get("four");
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -41,5 +50,22 @@ public class MecanumTest1617 extends OpMode {
 
         pad1.update(gamepad1);
         MecanumDrive1617.loop(frontLeft, frontRight, backLeft, backRight, pad1);
+
+        if (pad1.x){
+            servo1.setPosition(1);
+            servo2.setPosition(0);
+        }
+        if (pad1.y){
+            servo1.setPosition(.5);
+            servo2.setPosition(.5);
+        }
+        if (pad1.a){
+            servo3.setPower(.5);
+            servo4.setPosition(0);
+        }
+        if (pad1.b){
+            servo3.setPower(.5);
+            servo4.setPosition(.5);
+        }
     }
 }

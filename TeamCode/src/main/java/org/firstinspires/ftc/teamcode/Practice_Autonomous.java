@@ -4,6 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+/**
+ * Created by kevinwang on 10/13/17.
+ */
+
 @Autonomous(name="Autonomous practice")
 
 public class Practice_Autonomous extends LinearOpMode {
