@@ -21,9 +21,9 @@ public class Auto_Blue extends LinearOpMode {
     DcMotor bL;
     DcMotor fR;
     DcMotor bR;
-    DcMotor lS;
-    Servo left;
-    Servo right;
+    //DcMotor lS;
+    //Servo left;
+    //Servo right;
     Servo arm;
     ColorSensor color;
 
@@ -36,21 +36,21 @@ public class Auto_Blue extends LinearOpMode {
         bL = hardwareMap.dcMotor.get("backLeft");
         fR = hardwareMap.dcMotor.get("frontRight");
         bR = hardwareMap.dcMotor.get("backRight");
-        lS = hardwareMap.dcMotor.get("linearSlide");
-        left = hardwareMap.servo.get("left");
-        right = hardwareMap.servo.get("right");
+        //lS = hardwareMap.dcMotor.get("linearSlide");
+        //left = hardwareMap.servo.get("left");
+        //right = hardwareMap.servo.get("right");
         arm = hardwareMap.servo.get("arm");
         color = hardwareMap.colorSensor.get("color");
 
         fL.setDirection(DcMotor.Direction.REVERSE);
-        left.setDirection(Servo.Direction.REVERSE);
+        //left.setDirection(Servo.Direction.REVERSE);
         bL.setDirection(DcMotor.Direction.REVERSE);
 
         double POWER = .5;
 
         arm.setPosition(dPosition);
-        left.setPosition(0);
-        right.setPosition(0);
+        //left.setPosition(0);
+        //right.setPosition(0);
 
         telemetry.addData("Red: ", color.red());
         telemetry.addData("Blue: ", color.blue());
