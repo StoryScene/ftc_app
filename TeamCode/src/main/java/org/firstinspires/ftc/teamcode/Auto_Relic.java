@@ -96,6 +96,7 @@ public class Auto_Relic extends LinearOpMode {
 
 
     public double motorInit(){
+        MechanumDrive mecDrive = new MechanumDrive();
         fL = hardwareMap.dcMotor.get("frontLeft");
         bL = hardwareMap.dcMotor.get("backLeft");
         fR = hardwareMap.dcMotor.get("frontRight");
