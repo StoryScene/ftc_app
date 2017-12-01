@@ -15,7 +15,8 @@ public class ThreeMotors extends OpMode {
     DcMotor motorOne;
     DcMotor motorTwo;
     DcMotor motorTres;
-    Servo servo;
+    //Servo servo;
+    GamepadV2 pad1 = new GamepadV2();
 
 
     @Override
@@ -23,15 +24,18 @@ public class ThreeMotors extends OpMode {
         motorOne = hardwareMap.dcMotor.get("one");
         motorTwo = hardwareMap.dcMotor.get("two");
         motorTres = hardwareMap.dcMotor.get("three");
-        servo = hardwareMap.servo.get("servo");
+        //servo = hardwareMap.servo.get("servo");
 
     }
 
     @Override
     public void loop() {
-        motorOne.setPower(gamepad1.left_stick_y);
 
-        motorTwo.setPower(gamepad1.right_stick_y);
+        pad1.update(gamepad1);
+
+        motorOne.setPower(pad1.left_stick_y_exponential(.5));
+
+        motorTwo.setPower(pad1.right_stick_y_exponential(.5));
 
         if (gamepad1.a){
             motorTres.setPower(.3);
@@ -44,12 +48,12 @@ public class ThreeMotors extends OpMode {
             motorTres.setPower(0);
         }
 
-        if (gamepad1.left_bumper){
-            servo.setPosition(1);
-        }
-        if (gamepad1.right_bumper){
-            servo.setPosition(0);
-        }
+        //if (gamepad1.left_bumper){
+            //servo.setPosition(1);
+        //}
+        //if (gamepad1.right_bumper){
+            //servo.setPosition(0);
+        //}
 
         telemetry.addData("right stick",gamepad1.right_stick_y);
         telemetry.addData("left stick",gamepad1.left_stick_y);
