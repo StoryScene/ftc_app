@@ -27,15 +27,14 @@ public class Auto_Red extends LinearOpMode {
     Servo arm;
     ColorSensor color;
 
-    double dPosition = 0.3;
-    double oPosition = 1;
+
 
     public void runOpMode() throws InterruptedException {
 
-        fL = hardwareMap.dcMotor.get("frontLeft");
-        bL = hardwareMap.dcMotor.get("backLeft");
-        fR = hardwareMap.dcMotor.get("frontRight");
-        bR = hardwareMap.dcMotor.get("backRight");
+        fL = hardwareMap.dcMotor.get("leftF");
+        bL = hardwareMap.dcMotor.get("leftB");
+        fR = hardwareMap.dcMotor.get("rightF");
+        bR = hardwareMap.dcMotor.get("rightB");
         //lS = hardwareMap.dcMotor.get("linearSlide");
         //left = hardwareMap.servo.get("left");
         //right = hardwareMap.servo.get("right");
@@ -47,8 +46,9 @@ public class Auto_Red extends LinearOpMode {
         bL.setDirection(DcMotor.Direction.REVERSE);
 
         double POWER = .5;
+        double dPosition = 0.3;
+        double oPosition = arm.getPosition();
 
-        arm.setPosition(dPosition);
         //left.setPosition(0);
         //right.setPosition(0);
 
@@ -59,21 +59,27 @@ public class Auto_Red extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            if (color.blue()/2 > color.red()) {
-                fL.setPower(POWER);
-                bL.setPower(POWER);
-                fR.setPower(POWER);
-                bR.setPower(POWER);
-                sleep(200);
-                arm.setPosition(oPosition);
-            }
+            telemetry.addData("Current arm position: ", arm.getPosition());
 
-            if (color.blue() < color.red()/2) {
+            arm.setPosition(dPosition);
+
+            if (color.blue()/2 > color.red()) {
                 fL.setPower(-POWER);
                 bL.setPower(-POWER);
                 fR.setPower(-POWER);
                 bR.setPower(-POWER);
                 sleep(200);
+                dPosition = oPosition;
+                arm.setPosition(oPosition);
+            }
+
+            if (color.blue() < color.red()/2) {
+                fL.setPower(POWER);
+                bL.setPower(POWER);
+                fR.setPower(POWER);
+                bR.setPower(POWER);
+                sleep(750);
+                dPosition = oPosition;
                 arm.setPosition(oPosition);
             }
 
