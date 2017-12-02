@@ -20,7 +20,6 @@ public class FourServosOrTwoServos extends OpMode{
     DcMotor lf, rf, lb, rb;
     DcMotor lift;
     public GamepadV2 pad1 = new GamepadV2();
-    public GamepadV2 pad2 = new GamepadV2();
 
 
     @Override
@@ -40,19 +39,19 @@ public class FourServosOrTwoServos extends OpMode{
     @Override
     public void loop() {
 
-        if (gamepad1.a) {
+        if (gamepad2.a) {
             one.setPosition(.5);
             two.setPosition(-.5);
         }
-        if (gamepad1.b) {
+        if (gamepad2.b) {
             one.setPosition(-.5);
             two.setPosition(.5);
         }
-        if (gamepad1.x) {
+        if (gamepad2.x) {
             three.setPower(.5);
             four.setPower(-.5);
         }
-        else if (gamepad1.y){
+        else if (gamepad2.y){
             three.setPower(-.5);
             four.setPower(.5);
         }
@@ -60,10 +59,10 @@ public class FourServosOrTwoServos extends OpMode{
             three.setPower(0);
             four.setPower(0);
         }
-        if (gamepad1.dpad_down){
+        if (gamepad2.dpad_down){
             lift.setPower(-.5);
         }
-        else if (gamepad1.dpad_up){
+        else if (gamepad2.dpad_up){
             lift.setPower(.5);
         }
         else{
