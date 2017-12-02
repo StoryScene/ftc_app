@@ -15,8 +15,7 @@ import org.firstinspires.ftc.teamcode.modules.GamepadV2;
 @TeleOp
 public class FourServosOrTwoServos extends OpMode{
 
-    Servo one, two;
-    CRServo three, four;
+    CRServo one, two, three, four;
     DcMotor lf, rf, lb, rb;
     DcMotor lift;
     public GamepadV2 pad1 = new GamepadV2();
@@ -25,8 +24,8 @@ public class FourServosOrTwoServos extends OpMode{
     @Override
     public void init() {
 
-        one = hardwareMap.servo.get("one");
-        two = hardwareMap.servo.get("two");
+        one = hardwareMap.crservo.get("one");
+        two = hardwareMap.crservo.get("two");
         three = hardwareMap.crservo.get("three");
         four = hardwareMap.crservo.get("four");
 
@@ -40,12 +39,16 @@ public class FourServosOrTwoServos extends OpMode{
     public void loop() {
 
         if (gamepad1.a) {
-            one.setPosition(.75);
-            two.setPosition(.25);
+            one.setPower(.5);
+            two.setPower(-.5);
         }
-        if (gamepad1.b) {
-            one.setPosition(.25);
-            two.setPosition(.75);
+        else if (gamepad1.b) {
+            one.setPower(-.5);
+            two.setPower(.5);
+        }
+        else {
+            one.setPower(0);
+            two.setPower(0);
         }
         if (gamepad1.x) {
             three.setPower(.5);
