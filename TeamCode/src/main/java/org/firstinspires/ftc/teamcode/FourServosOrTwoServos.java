@@ -15,17 +15,19 @@ import org.firstinspires.ftc.teamcode.modules.GamepadV2;
 @TeleOp
 public class FourServosOrTwoServos extends OpMode{
 
-    CRServo one, two, three, four;
+    Servo one, two;
+    CRServo three, four;
     DcMotor lf, rf, lb, rb;
     DcMotor lift;
     public GamepadV2 pad1 = new GamepadV2();
+    public GamepadV2 pad2 = new GamepadV2();
 
 
     @Override
     public void init() {
 
-        one = hardwareMap.crservo.get("one");
-        two = hardwareMap.crservo.get("two");
+        one = hardwareMap.servo.get("one");
+        two = hardwareMap.servo.get("two");
         three = hardwareMap.crservo.get("three");
         four = hardwareMap.crservo.get("four");
 
@@ -39,16 +41,12 @@ public class FourServosOrTwoServos extends OpMode{
     public void loop() {
 
         if (gamepad1.a) {
-            one.setPower(.5);
-            two.setPower(-.5);
+            one.setPosition(.5);
+            two.setPosition(-.5);
         }
-        else if (gamepad1.b) {
-            one.setPower(-.5);
-            two.setPower(.5);
-        }
-        else {
-            one.setPower(0);
-            two.setPower(0);
+        if (gamepad1.b) {
+            one.setPosition(-.5);
+            two.setPosition(.5);
         }
         if (gamepad1.x) {
             three.setPower(.5);
@@ -71,6 +69,9 @@ public class FourServosOrTwoServos extends OpMode{
         else{
             lift.setPower(0);
         }
+
+        telemetry.addData("position 1", one.getPosition());
+        telemetry.addData("position 2", two.getPosition());
 
         mechanumLoop();
         telemetry.addData("Power of lf, rf, lb, rb:\n", lf.getPower() + "\n" + rf.getPower()
