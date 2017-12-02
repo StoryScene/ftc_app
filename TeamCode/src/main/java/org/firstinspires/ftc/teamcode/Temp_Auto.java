@@ -17,7 +17,6 @@ public class Temp_Auto extends OpMode {
 
     DcMotor lf, rf, lb, rb;
     Wheels wheels;
-    double startTime;
 
 
     @Override
@@ -27,29 +26,20 @@ public class Temp_Auto extends OpMode {
         lb = hardwareMap.dcMotor.get("leftB");
         rb = hardwareMap.dcMotor.get("rightB");
 
-        /*
         wheels = new Wheels(lf, rf, lb, rb);
 
         wheels.initialize();
-        */
-        startTime = getRuntime();
-
+        resetStartTime();
     }
 
     @Override
     public void loop() {
         telemetry.addData("Wheels power: ", lf.getPower() + "\n" + rf.getPower() + "\n" + lb.getPower() + "\n" + rb.getPower());
-        if (getRuntime() - startTime < 2) {
-            lf.setPower(-1);
-            rf.setPower(-1);
-            lb.setPower(-1);
-            rb.setPower(-1);
+        if (getRuntime() < 2) {
+            wheels.move(0,1,0);
         }
         else {
-            lf.setPower(0);
-            rf.setPower(0);
-            lb.setPower(0);
-            rb.setPower(0);
+            wheels.move(0,0,0);
         }
 
     }

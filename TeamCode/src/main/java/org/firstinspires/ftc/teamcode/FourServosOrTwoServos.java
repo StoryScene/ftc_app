@@ -39,12 +39,14 @@ public class FourServosOrTwoServos extends OpMode{
     @Override
     public void loop() {
 
+        double one_pos = one.getPosition();
+
         if (gamepad2.a) {
-            one.setPosition(.5);
+            one.setPosition(one_pos+.5);
             two.setPosition(-.5);
         }
         if (gamepad2.b) {
-            one.setPosition(-.5);
+            one.setPosition(one_pos-.5);
             two.setPosition(.5);
         }
         if (gamepad2.x) {
