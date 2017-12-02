@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
@@ -12,7 +13,8 @@ import com.qualcomm.robotcore.util.Range;
 @TeleOp
 public class FourServosOrTwoServos extends OpMode{
 
-    Servo one, two, three, four;
+    Servo one, two;
+    CRServo three, four;
     DcMotor lf, rf, lb, rb;
     DcMotor lift;
 
@@ -21,8 +23,8 @@ public class FourServosOrTwoServos extends OpMode{
 
         one = hardwareMap.servo.get("one");
         two = hardwareMap.servo.get("two");
-        three = hardwareMap.servo.get("three");
-        four = hardwareMap.servo.get("four");
+        three = hardwareMap.crservo.get("three");
+        four = hardwareMap.crservo.get("four");
 
         lift = hardwareMap.dcMotor.get("lift");
 
@@ -34,26 +36,33 @@ public class FourServosOrTwoServos extends OpMode{
     public void loop() {
 
         if (gamepad1.a) {
-            one.setPosition(1);
-            two.setPosition(1);
+            one.setPosition(.75);
+            two.setPosition(.25);
         }
         if (gamepad1.b) {
-            one.setPosition(0);
-            two.setPosition(0);
+            one.setPosition(.25);
+            two.setPosition(.75);
         }
         if (gamepad1.x) {
-            three.setPosition(1);
-            four.setPosition(1);
+            three.setPower(.5);
+            four.setPower(-.5);
         }
-        if (gamepad1.y){
-            three.setPosition(0);
-            four.setPosition(0);
+        else if (gamepad1.y){
+            three.setPower(-.5);
+            four.setPower(.5);
+        }
+        else{
+            three.setPower(0);
+            four.setPower(0);
         }
         if (gamepad1.dpad_down){
+            lift.setPower(-.5);
+        }
+        else if (gamepad1.dpad_up){
             lift.setPower(.5);
         }
-        if (gamepad1.dpad_up){
-            lift.setPower(-.5);
+        else{
+            lift.setPower(0);
         }
 
         mechanumLoop();
