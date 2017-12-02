@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.modules.GamepadV2;
+
 /**
  * Created by Kit Caldwell on 11/14/2017.
  */
@@ -17,6 +19,8 @@ public class FourServosOrTwoServos extends OpMode{
     CRServo three, four;
     DcMotor lf, rf, lb, rb;
     DcMotor lift;
+    public GamepadV2 pad1 = new GamepadV2();
+
 
     @Override
     public void init() {
@@ -83,16 +87,37 @@ public class FourServosOrTwoServos extends OpMode{
         rf = hardwareMap.dcMotor.get("rightF");
         lb = hardwareMap.dcMotor.get("leftB");
         rb = hardwareMap.dcMotor.get("rightB");
+
+        lf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        lf.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rf.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        lb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
 
     private void mechanumLoop() {
+        pad1.update(gamepad1);
         double x = Range.clip(gamepad1.left_stick_x, -1, 1);
-        double y = Range.clip(gamepad1.left_stick_y, -1, 1);
+        double y = - Range.clip(gamepad1.left_stick_y, -1, 1);
+
+        if (Math.abs(x) < 0.1) {
+            x = 0;
+        }
+        if (Math.abs(y) < 0.1) {
+            y = 0;
+        }
+
         double rot = Range.clip(gamepad1.right_stick_x, -1, 1);
 
         double r = Math.hypot(x, y);
         double angle = 0.0;
+
+        double POW = Math.max(Math.hypot(x, y), Math.abs(rot));
 
 
         if (r > 0.1){
@@ -116,10 +141,11 @@ public class FourServosOrTwoServos extends OpMode{
         vlb /= maxPower;
         vrb /= maxPower;
 
-        lf.setPower(Range.clip(vlf, -1, 1));
-        rf.setPower(Range.clip(vrf, -1, 1));
-        lb.setPower(Range.clip(vlb, -1, 1));
-        rb.setPower(Range.clip(vrb, -1, 1));
+        lf.setPower(Math.pow(POW,2) * Range.clip(vlf, -1, 1));
+        rf.setPower(-Math.pow(POW,2) * Range.clip(vrf, -1, 1));
+        lb.setPower(Math.pow(POW,2) * Range.clip(vlb, -1, 1));
+        rb.setPower(-Math.pow(POW,2) * Range.clip(vrb, -1, 1));
+
 
         telemetry.addData("maxPower: ", maxPower);
     }
