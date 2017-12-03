@@ -2,9 +2,11 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
@@ -19,6 +21,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.firstinspires.ftc.teamcode.modules.GamepadV2;
 
 
 /**
@@ -32,22 +35,20 @@ public class Auto_Relic extends LinearOpMode {
 
     OpenGLMatrix lastLocation = null;
 
-    double tStartArm = 2, tStartMoving = 8, tPlaceRelic;
+    final double tStartArm = 2, tStartMoving = 8, absoluteMaxPower = 0.5;
+    double tPlaceRelic;
     int state = 0;
-    double startTime, runTime;
+    double startTime, runTime, oPosition;
 
-    DcMotor fL;
-    DcMotor bL;
-    DcMotor fR;
-    DcMotor bR;
-    DcMotor lS;
-    Servo left;
-    Servo right;
+    DcMotor lf, lb, rf, rb, lift;
     Servo arm;
+    CRServo three, four;
     ColorSensor color;
+    public GamepadV2 pad1 = new GamepadV2();
 
-    double dPosition = 0.3;
-    double oPosition = 1;
+
+
+    final double ARMTARGETPOS = 0.3;
 
 
     /**
@@ -58,14 +59,15 @@ public class Auto_Relic extends LinearOpMode {
 
     @Override public void runOpMode() {
 
-        double POW = motorInit();
+        motorInit();
         VuforiaTrackable relicImage = setUpVuforia();
         startTime = getRuntime();
+        oPosition = arm.getPosition();
 
         while (opModeIsActive()) {
             runTime = getRuntime() - startTime;
             if (runTime < tStartArm) {
-                moveArmLoop(POW);
+                moveArmLoop();
             }
             else if (runTime < tStartMoving+2){
                 RelicRecoveryVuMark goal = lookForRelicImage(relicImage);
@@ -78,13 +80,11 @@ public class Auto_Relic extends LinearOpMode {
                 else if (goal.equals(RelicRecoveryVuMark.RIGHT)) {
                     state = 4;
                 }
+                telemetry.addData("Did it recognize: ", state);
                 tPlaceRelic = state + 8; // or something idk
             }
             else if (runTime < tPlaceRelic){
-                fL.setPower(POW);
-                bL.setPower(-POW);
-                fR.setPower(-POW);
-                bR.setPower(POW);
+                setPowers(0,absoluteMaxPower,0);
             }
         }
     }
@@ -93,60 +93,53 @@ public class Auto_Relic extends LinearOpMode {
         return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
     }
 
+    public void motorInit(){
+        lf = hardwareMap.dcMotor.get("leftF");
+        rf = hardwareMap.dcMotor.get("rightF");
+        lb = hardwareMap.dcMotor.get("leftB");
+        rb = hardwareMap.dcMotor.get("rightB");
 
+        lf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-    public double motorInit(){
-        MechanumDrive mecDrive = new MechanumDrive();
-        fL = hardwareMap.dcMotor.get("frontLeft");
-        bL = hardwareMap.dcMotor.get("backLeft");
-        fR = hardwareMap.dcMotor.get("frontRight");
-        bR = hardwareMap.dcMotor.get("backRight");
-        lS = hardwareMap.dcMotor.get("linearSlide");
-        left = hardwareMap.servo.get("left");
-        right = hardwareMap.servo.get("right");
+        lf.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rf.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        lb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         arm = hardwareMap.servo.get("arm");
         color = hardwareMap.colorSensor.get("color");
 
-        fL.setDirection(DcMotor.Direction.REVERSE);
-        left.setDirection(Servo.Direction.REVERSE);
-        bL.setDirection(DcMotor.Direction.REVERSE);
+        three = hardwareMap.crservo.get("three");
+        four = hardwareMap.crservo.get("four");
 
-        double POWER = .5;
+        lift = hardwareMap.dcMotor.get("lift");
 
-        arm.setPosition(dPosition);
-        left.setPosition(0);
-        right.setPosition(0);
+        arm.setPosition(oPosition + ARMTARGETPOS);
 
         telemetry.addData("Red: ", color.red());
         telemetry.addData("Blue: ", color.blue());
 
-        return POWER;
     }
 
-    public void moveArmLoop(double POWER){
+    public void moveArmLoop(){
+        arm.setPosition(oPosition+ARMTARGETPOS);
         if (color.blue()/2 > color.red()) {
+            setPowers(0,absoluteMaxPower,0);
+            sleep(200);
             arm.setPosition(oPosition);
-            fL.setPower(-POWER);
-            bL.setPower(POWER);
-            fR.setPower(POWER);
-            bR.setPower(-POWER);
-
         }
 
         if (color.blue() < color.red()/2) {
-            fL.setPower(POWER);
-            bL.setPower(-POWER);
-            fR.setPower(-POWER);
-            bR.setPower(POWER);
+            setPowers(0,-absoluteMaxPower,0);
             sleep(200);
             arm.setPosition(oPosition);
         }
 
         else{
-            fL.setPower(0);
-            bL.setPower(0);
-            fR.setPower(0);
-            bR.setPower(0);
+            setPowers(0,0,0);
         }
     }
     
@@ -249,6 +242,60 @@ public class Auto_Relic extends LinearOpMode {
 
         telemetry.update();
         return vuMark;
+    }
+
+
+
+    public void setPowers(double xx, double yy, double rotation) {
+        double x = Range.clip(xx, -1, 1);
+        double y = - Range.clip(yy, -1, 1);
+
+        if (Math.abs(x) < 0.1) {
+            x = 0;
+        }
+        if (Math.abs(y) < 0.1) {
+            y = 0;
+        }
+
+        double rot = rotation;
+
+
+        double r = Math.hypot(x, y);
+        double angle = 0.0;
+
+        double POW = Math.max(Math.hypot(x, y), Math.abs(rot));
+
+
+        if (r > 0.1){
+            angle = Math.atan2(y,x) - Math.PI / 4;
+        }
+
+        double vlf = r * Math.cos(angle) + rot;
+        double vrf = r * Math.sin(angle) - rot;
+        double vlb = r * Math.sin(angle) + rot;
+        double vrb = r * Math.cos(angle) - rot;
+
+        double maxPower = maxPow(vlf, vrf, vlb, vrb);
+
+        vlf /= maxPower;
+        vrf /= maxPower;
+        vlb /= maxPower;
+        vrb /= maxPower;
+
+
+        lf.setPower(Math.pow(POW,2) * Range.clip(vlf, -1, 1));
+        rf.setPower(-Math.pow(POW,2) * Range.clip(vrf, -1, 1));
+        lb.setPower(Math.pow(POW,2) * Range.clip(vlb, -1, 1));
+        rb.setPower(-Math.pow(POW,2) * Range.clip(vrb, -1, 1));
+
+    }
+
+    private double maxPow(double x, double y, double z, double w) {
+        x = Math.abs(x);
+        y = Math.abs(y);
+        z = Math.abs(z);
+        w = Math.abs(w);
+        return Math.max(Math.max(x,y), Math.max(z,w));
     }
 
 }

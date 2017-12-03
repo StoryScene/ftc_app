@@ -45,7 +45,7 @@ public class Wheels {
     }
 
     //Pass in directly
-    public void move(double xx, double yy, double rotation) {
+    public double[] move(double xx, double yy, double rotation) {
         double x = Range.clip(xx, -1, 1);
         double y = - Range.clip(yy, -1, 1);
 
@@ -85,10 +85,20 @@ public class Wheels {
         vlb /= maxPower;
         vrb /= maxPower;
 
+        /*
         lf.setPower(Math.pow(POW,2) * Range.clip(vlf, -1, 1));
         rf.setPower(-Math.pow(POW,2) * Range.clip(vrf, -1, 1));
         lb.setPower(Math.pow(POW,2) * Range.clip(vlb, -1, 1));
         rb.setPower(-Math.pow(POW,2) * Range.clip(vrb, -1, 1));
+        */
+
+        double[] result = new double[4];
+        result[0] = Math.pow(POW,2) * Range.clip(vlf, -1, 1);
+        result[1] = Math.pow(POW,2) * Range.clip(vrf, -1, 1);
+        result[2] = Math.pow(POW,2) * Range.clip(vlb, -1, 1);
+        result[3] = Math.pow(POW,2) * Range.clip(vrb, -1, 1);
+
+        return result;
 
     }
 
