@@ -36,7 +36,9 @@ public class fourMotorTest extends OpMode {
     }
     public void loop(){
 
-        motorLeft.setPower(gamepad1.left_stick_y);
+        double power = gamepad1.left_stick_y;
+
+        motorLeft.setPower(power);
         motorRight.setPower(gamepad1.right_stick_y);
 
         if (gamepad1.x == true){
@@ -72,6 +74,7 @@ public class fourMotorTest extends OpMode {
         telemetry.addData("y",gamepad1.y);
         telemetry.addData("right stick", gamepad1.right_stick_y);
         telemetry.addData("left stick", gamepad1.left_stick_y);
+
 
 
     }

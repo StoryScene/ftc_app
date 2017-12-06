@@ -35,7 +35,7 @@ public class Temp_Auto extends OpMode {
     @Override
     public void loop() {
         telemetry.addData("Wheels power: ", lf.getPower() + "\n" + rf.getPower() + "\n" + lb.getPower() + "\n" + rb.getPower());
-        if (getRuntime() < 2) {
+        if (getRuntime() < 1.8) {
             wheels.move(0,1,0);
         }
         else {

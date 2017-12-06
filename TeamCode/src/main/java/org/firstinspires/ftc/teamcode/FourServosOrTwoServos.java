@@ -146,10 +146,10 @@ public class FourServosOrTwoServos extends OpMode{
         vlb /= maxPower;
         vrb /= maxPower;
 
-        lf.setPower(Math.pow(POW,2) * Range.clip(vlf, -1, 1));
-        rf.setPower(-Math.pow(POW,2) * Range.clip(vrf, -1, 1));
-        lb.setPower(Math.pow(POW,2) * Range.clip(vlb, -1, 1));
-        rb.setPower(-Math.pow(POW,2) * Range.clip(vrb, -1, 1));
+        lf.setPower(0.6*Math.pow(POW,2) * Range.clip(vlf, -1, 1));
+        rf.setPower(0.6*-Math.pow(POW,2) * Range.clip(vrf, -1, 1));
+        lb.setPower(0.6*Math.pow(POW,2) * Range.clip(vlb, -1, 1));
+        rb.setPower(0.6*-Math.pow(POW,2) * Range.clip(vrb, -1, 1));
 
 
         telemetry.addData("maxPower: ", maxPower);

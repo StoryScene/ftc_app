@@ -27,6 +27,7 @@ public class Gyro_Program extends LinearOpMode {
     public void runOpMode() throws InterruptedException
 
     {
+
         // Initialize stuff
         frontleft = hardwareMap.dcMotor.get("frontleft");
         frontright = hardwareMap.dcMotor.get("frontright");
