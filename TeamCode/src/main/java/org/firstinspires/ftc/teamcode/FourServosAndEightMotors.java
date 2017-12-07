@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.modules.GamepadV2;
 
 /**
- * Created by Kit Caldwell on 11/14/2017.
+ * Created by Kit Caldwell on 12/06/2017.
  */
 @TeleOp
 public class FourServosAndEightMotors extends OpMode{
