@@ -22,6 +22,7 @@ public class SquareBotTeleOp extends OpMode {
     GamepadV2 pad1 = new GamepadV2();
 
     double oPos, cPos;
+    boolean previously;
     final double INCREMENT = 0.1;
 
 
@@ -33,6 +34,7 @@ public class SquareBotTeleOp extends OpMode {
         color = hardwareMap.colorSensor.get("color");
 
         oPos = arm.getPosition();
+        cPos = arm.getPosition();
     }
 
     @Override
@@ -42,10 +44,17 @@ public class SquareBotTeleOp extends OpMode {
         if (pad1.left_bumper){
             arm.setPosition(oPos);
             cPos = oPos;
+            previously = false;
         }
         else if (pad1.right_bumper){
-            cPos += INCREMENT;
-            arm.setPosition(cPos);
+            if (previously == false){
+                cPos += INCREMENT;
+                arm.setPosition(Range.clip(cPos, -1, 1));
+            }
+            previously = true;
+        }
+        else {
+            previously = false;
         }
         telemetry.addData("Arm position: ", arm.getPosition());
         telemetry.addData("Supposedly at: ", cPos);
