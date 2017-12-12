@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.modules.GamepadV2;
  */
 
 @TeleOp
-public class justFuckinAllOfIt extends OpMode{
+public class JustFuckinAllOfIt extends OpMode{
     Servo one, two;
     CRServo three, four;
     DcMotor lf, rf, lb, rb;
