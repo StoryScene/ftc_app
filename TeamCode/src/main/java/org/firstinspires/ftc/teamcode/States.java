@@ -1,3 +1,4 @@
+
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -23,14 +24,15 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.modules.GamepadV2;
+import org.firstinspires.ftc.teamcode.modules.State;
+import org.firstinspires.ftc.teamcode.modules.StateMachine;
 
 /**
  * Created by Emma on 12/5/17.
  */
 
 @Autonomous
-public class SquareBotWithEyes extends LinearOpMode {
-
+public class States extends LinearOpMode {
 
     public static final String TAG = "Vuforia VuMark Sample";
 
@@ -42,7 +44,7 @@ public class SquareBotWithEyes extends LinearOpMode {
     double startTime, runTime, oPosition;
 
     DcMotor lf, lb, rf, rb, lift;
-
+    /*
     Servo arm;
     CRServo three, four;
     ColorSensor color;
@@ -52,54 +54,30 @@ public class SquareBotWithEyes extends LinearOpMode {
 
 
     final double ARMTARGETPOS = 0.3;
+    */
 
+    private enum State {
+        STATE_REST,
+        STATE_ARMDOWN,
+        STATE_MOVEARM,
+        STATE_ARMUP,
+        STATE_IMAGE,
+        STATE_DRIVEFAR,
+    }
+
+
+    @Override
+    public void runOpMode() {
+        while (opModeIsActive()){
+
+        }
+    }
 
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
      * localization engine.
      */
     VuforiaLocalizer vuforia;
-
-    @Override public void runOpMode() {
-
-        motorInit();
-        VuforiaTrackable relicImage = setUpVuforia();
-        startTime = getRuntime();
-        /*
-        oPosition = arm.getPosition();
-        */
-
-        while (opModeIsActive()) {
-            runTime = getRuntime() - startTime;
-            telemetry.addData("Run time: ", runTime);
-            if (runTime < tStartArm) {
-                //moveArmLoop();
-                telemetry.addData("Raising ", "my invisible arm...");
-            }
-            else if (runTime < tStartMoving+2){
-                RelicRecoveryVuMark goal = lookForRelicImage(relicImage);
-                if (goal.equals(RelicRecoveryVuMark.LEFT)){
-                    state = 2;
-                }
-                else if (goal.equals(RelicRecoveryVuMark.CENTER)) {
-                    state = 3;
-                }
-                else if (goal.equals(RelicRecoveryVuMark.RIGHT)) {
-                    state = 4;
-                }
-                telemetry.addData("Did it recognize: ", state);
-                tPlaceRelic = state + 8; // or something idk
-                telemetry.addData("time: ", tPlaceRelic);
-            }
-            else if (runTime < tPlaceRelic){
-                boolean oppos = false;
-
-                setPowers(0,absoluteMaxPower,0);
-                telemetry.addData("Moving at the same constant speed as you are", " ;)");
-            }
-
-        }
-    }
 
     String format(OpenGLMatrix transformationMatrix) {
         return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
@@ -139,7 +117,7 @@ public class SquareBotWithEyes extends LinearOpMode {
 
 
     public void moveArmLoop(){
-
+        /*
         arm.setPosition(oPosition+ARMTARGETPOS);
         if (color.blue()/2 > color.red()) {
             setPowers(0,absoluteMaxPower,0);
@@ -156,7 +134,7 @@ public class SquareBotWithEyes extends LinearOpMode {
         else{
             setPowers(0,0,0);
         }
-
+        */
     }
 
 
@@ -368,5 +346,6 @@ public class SquareBotWithEyes extends LinearOpMode {
         w = Math.abs(w);
         return Math.max(Math.max(x,y), Math.max(z,w));
     }
+
 
 }
