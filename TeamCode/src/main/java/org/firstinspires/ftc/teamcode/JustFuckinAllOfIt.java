@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
@@ -45,58 +44,73 @@ public class JustFuckinAllOfIt extends OpMode{
 
     @Override
     public void loop() {
+        double one_pos = one.getPosition();
 
-        //top glyph servos
-        if (gamepad1.right_bumper){
-            one.setPosition(1);
-            two.setPosition(0);
+        if (gamepad2.right_bumper) {
+            one.setPosition(one_pos+.5);
+            two.setPosition(-.5);
         }
-        else if (gamepad1.right_trigger>0){
-            one.setPosition(0);
-            two.setPosition(1);
+        if (gamepad2.left_bumper) {
+            one.setPosition(one_pos-.5);
+            two.setPosition(.5);
         }
-
-        //bottom glyph servos
-        if (gamepad1.left_bumper){
-            three.setPower(1);
-            four.setPower(1);
+        if (gamepad2.x) {
+            three.setPower(.5);
+            four.setPower(-.5);
         }
-        else if (gamepad1.left_trigger>0){
-            three.setPower(-1);
-            four.setPower(-1);
+        else if (gamepad2.y){
+            three.setPower(-.5);
+            four.setPower(.5);
         }
         else{
             three.setPower(0);
             four.setPower(0);
         }
+        if (gamepad2.dpad_down){
+            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            telemetry.addData("lift position: ", lift.getCurrentPosition());
+            if (!wasChangingTargetPos){
+                targetPosForLift -= 100;
+                lift.setTargetPosition(targetPosForLift);
+                wasChangingTargetPos = true;
+            }
 
-        //lift robot
-        if (gamepad2.b){
-            r2.setPower(.25);
+            //lift.setPower(-.5);
         }
-        else if (gamepad2.y){
-            r2.setPower(-.25);
+        else if (gamepad2.dpad_up){
+            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            telemetry.addData("lift position: ", lift.getCurrentPosition());
+            if (!wasChangingTargetPos){
+                targetPosForLift += 100;
+                lift.setTargetPosition(targetPosForLift);
+                wasChangingTargetPos = true;
+            }
+
+            //lift.setPower(.5);
         }
         else{
-            r2.setPower(0);
+            lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            targetPosForLift = 0;
+            lift.setPower(0);
+            wasChangingTargetPos = false;
         }
-
-        //arm spool
-        r1.setPower(gamepad2.left_stick_y);
-
-        //glyph lift
-        lift.setPower(gamepad2.right_stick_y);
-        lift.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        //extend
-        if (gamepad2.dpad_up){
-            r3.setPower(.25);
+        if (gamepad2.a){
+            r1.setPower(.5);
         }
-        else if (gamepad2.dpad_down){
-            r3.setPower(-.25);
+        else if (gamepad2.b){
+            r1.setPower(-.5);
         }
-        else{
-            r3.setPower(0);
+        if (gamepad1.a){
+            r2.setPower(.5);
+        }
+        else if (gamepad1.b){
+            r2.setPower(-.5);
+        }
+        if (gamepad1.x){
+            r3.setPower(.5);
+        }
+        else if (gamepad1.y){
+            r3.setPower(-.5);
         }
 
         telemetry.addData("position 1", one.getPosition());
@@ -157,7 +171,7 @@ public class JustFuckinAllOfIt extends OpMode{
             angle = Math.atan2(y,x) - Math.PI / 4;
         }
 
-        telemetry.addData(  "angle: ", angle);
+        telemetry.addData("angle: ", angle);
         telemetry.addData("radius: ", r);
         telemetry.addData("rotate: ", rot);
 
