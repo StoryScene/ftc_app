@@ -74,8 +74,7 @@ public class JustFuckinAllOfIt extends OpMode{
                 lift.setTargetPosition(targetPosForLift);
                 wasChangingTargetPos = true;
             }
-
-            //lift.setPower(-.5);
+            lift.setPower(-.5);
         }
         else if (gamepad2.dpad_up){
             lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -85,8 +84,7 @@ public class JustFuckinAllOfIt extends OpMode{
                 lift.setTargetPosition(targetPosForLift);
                 wasChangingTargetPos = true;
             }
-
-            //lift.setPower(.5);
+            lift.setPower(.5);
         }
         else{
             lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
