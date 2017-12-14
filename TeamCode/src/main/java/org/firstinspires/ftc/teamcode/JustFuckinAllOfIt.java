@@ -22,6 +22,9 @@ public class JustFuckinAllOfIt extends OpMode{
     DcMotor r1, r2, r3;
     public GamepadV2 pad1 = new GamepadV2();
 
+    int targetPosForLift = 0;
+    boolean wasChangingTargetPos = false;
+
     @Override
     public void init() {
         one = hardwareMap.servo.get("one");
@@ -64,13 +67,32 @@ public class JustFuckinAllOfIt extends OpMode{
             four.setPower(0);
         }
         if (gamepad2.dpad_down){
-            lift.setPower(-.5);
+            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            telemetry.addData("lift position: ", lift.getCurrentPosition());
+            if (!wasChangingTargetPos){
+                targetPosForLift -= 100;
+                lift.setTargetPosition(targetPosForLift);
+                wasChangingTargetPos = true;
+            }
+
+            //lift.setPower(-.5);
         }
         else if (gamepad2.dpad_up){
-            lift.setPower(.5);
+            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            telemetry.addData("lift position: ", lift.getCurrentPosition());
+            if (!wasChangingTargetPos){
+                targetPosForLift += 100;
+                lift.setTargetPosition(targetPosForLift);
+                wasChangingTargetPos = true;
+            }
+
+            //lift.setPower(.5);
         }
         else{
+            lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            targetPosForLift = 0;
             lift.setPower(0);
+            wasChangingTargetPos = false;
         }
         if (gamepad2.a){
             r1.setPower(.5);

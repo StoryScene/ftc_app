@@ -49,7 +49,7 @@ public class SquareBotTeleOp extends OpMode {
             previously = false;
         }
         else if (pad1.right_bumper){
-            if (previously == false){
+            if (!previously){
                 cPos += INCREMENT;
                 arm.setPosition(Range.clip(cPos, -1, 1));
             }
@@ -122,10 +122,10 @@ public class SquareBotTeleOp extends OpMode {
         vlb /= maxPower;
         vrb /= maxPower;
 
-        lf.setPower(0.5*Math.pow(POW,2) * Range.clip(vlf, -0.5, 0.5));
-        rf.setPower(-0.5*Math.pow(POW,2) * Range.clip(vrf, -0.5, 0.5));
-        lb.setPower(0.5*Math.pow(POW,2) * Range.clip(vlb, -0.5, 0.5));
-        rb.setPower(-0.5*Math.pow(POW,2) * Range.clip(vrb, -0.5, 0.5));
+        lf.setPower(0.5*Math.pow(POW,2) * Range.clip(vlf, -1, 1));
+        rf.setPower(-0.5*Math.pow(POW,2) * Range.clip(vrf, -1, 1));
+        lb.setPower(0.5*Math.pow(POW,2) * Range.clip(vlb, -1, 1));
+        rb.setPower(-0.5*Math.pow(POW,2) * Range.clip(vrb, -1, 1));
 
 
         telemetry.addData("maxPower: ", maxPower);

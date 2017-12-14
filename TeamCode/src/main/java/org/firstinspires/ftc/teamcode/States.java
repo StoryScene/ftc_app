@@ -68,6 +68,9 @@ public class States extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        motorInit();
+        VuforiaTrackable relicImage = setUpVuforia();
+
         while (opModeIsActive()){
 
         }
