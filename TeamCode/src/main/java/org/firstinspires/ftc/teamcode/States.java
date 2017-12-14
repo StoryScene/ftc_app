@@ -38,31 +38,23 @@ public class States extends LinearOpMode {
 
     OpenGLMatrix lastLocation = null;
 
-    final double tStartArm = 2, tStartMoving = 8, absoluteMaxPower = 0.5;
-    double tPlaceRelic;
-    int state = 0;
-    double startTime, runTime, oPosition;
+    private final double absoluteMaxPower = 0.5, ARMTARGETPOS = 0.3;
+    private double tPlaceRelic, oPosition;
+    private int state = 0;
 
-    DcMotor lf, lb, rf, rb, lift;
-    /*
+    manyStates multipleStates;
+
+    DcMotor lf, lb, rf, rb;
+
     Servo arm;
-    CRServo three, four;
     ColorSensor color;
 
-    public GamepadV2 pad1 = new GamepadV2();
-
-
-
-    final double ARMTARGETPOS = 0.3;
-    */
-
-    private enum State {
+    private enum manyStates {
         STATE_REST,
-        STATE_ARMDOWN,
         STATE_MOVEARM,
-        STATE_ARMUP,
         STATE_IMAGE,
         STATE_DRIVEFAR,
+        STATE_TURN,
     }
 
 
@@ -72,6 +64,32 @@ public class States extends LinearOpMode {
         VuforiaTrackable relicImage = setUpVuforia();
 
         while (opModeIsActive()){
+            telemetry.addData("Cuurent State: ",  multipleStates);
+            switch (multipleStates) {
+                case STATE_REST:
+                    setPowers(0,0,0);
+                case STATE_MOVEARM:
+                    moveArmLoop();
+                    multipleStates = manyStates.STATE_IMAGE;
+                    break;
+                case STATE_IMAGE:
+                    look(relicImage);
+                    multipleStates = manyStates.STATE_DRIVEFAR;
+                    break;
+                case STATE_DRIVEFAR:
+                    setPowers(absoluteMaxPower,0,0);
+                    VuforiaTrackable newImage = setUpOtherCamera();
+                    look(newImage);
+                    multipleStates = manyStates.STATE_TURN;
+                    sleep((int)(tPlaceRelic*1000));
+                    break;
+                case STATE_TURN:
+                    setPowers(0,0,absoluteMaxPower);
+                    sleep(1000);
+                    multipleStates = manyStates.STATE_REST;
+                    break;
+            }
+
 
         }
     }
@@ -102,26 +120,28 @@ public class States extends LinearOpMode {
         lb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        /*
         arm = hardwareMap.servo.get("arm");
         color = hardwareMap.colorSensor.get("color");
 
-        three = hardwareMap.crservo.get("three");
-        four = hardwareMap.crservo.get("four");
+        oPosition = arm.getPosition();
 
-        lift = hardwareMap.dcMotor.get("lift");
+        //three = hardwareMap.crservo.get("three");
+        //four = hardwareMap.crservo.get("four");
 
-        arm.setPosition(oPosition + ARMTARGETPOS);
+        //lift = hardwareMap.dcMotor.get("lift");
 
-        telemetry.addData("Red: ", color.red());
-        telemetry.addData("Blue: ", color.blue());
-        */
+
+
     }
 
 
     public void moveArmLoop(){
-        /*
+
         arm.setPosition(oPosition+ARMTARGETPOS);
+        telemetry.addData("Red: ", color.red());
+        telemetry.addData("Blue: ", color.blue());
+        telemetry.addData("Arm position: ", arm.getPosition());
+        sleep(1000);
         if (color.blue()/2 > color.red()) {
             setPowers(0,absoluteMaxPower,0);
             sleep(200);
@@ -133,13 +153,31 @@ public class States extends LinearOpMode {
             sleep(200);
             arm.setPosition(oPosition);
         }
-
         else{
             setPowers(0,0,0);
         }
-        */
+
+
     }
 
+
+    public double look(VuforiaTrackable relicImage){
+        RelicRecoveryVuMark goal = lookForRelicImage(relicImage);
+        sleep(100);
+        if (goal.equals(RelicRecoveryVuMark.LEFT)){
+            state = 2;
+        }
+        else if (goal.equals(RelicRecoveryVuMark.CENTER)) {
+            state = 3;
+        }
+        else if (goal.equals(RelicRecoveryVuMark.RIGHT)) {
+            state = 4;
+        }
+        telemetry.addData("Did it recognize: ", state);
+        tPlaceRelic = state + 8; // or something idk
+        telemetry.addData("time: ", tPlaceRelic);
+        return tPlaceRelic;
+    }
 
     public VuforiaTrackable setUpVuforia() {
 
@@ -295,7 +333,6 @@ public class States extends LinearOpMode {
         telemetry.update();
         return vuMark;
     }
-
 
 
     public void setPowers(double xx, double yy, double rotation) {
