@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.modules.GamepadV2;
  */
 
 @TeleOp
-public class JustFuckinAllOfIt extends OpMode{
+public class JustAllOfIt extends OpMode{
     Servo one, two;
     CRServo three, four;
     DcMotor lf, rf, lb, rb;
@@ -46,19 +46,21 @@ public class JustFuckinAllOfIt extends OpMode{
     public void loop() {
         double one_pos = one.getPosition();
 
-        if (gamepad2.right_bumper) {
+        //top servos
+        if (gamepad1.right_bumper) {
             one.setPosition(one_pos+.5);
             two.setPosition(-.5);
         }
-        if (gamepad2.left_bumper) {
+        if (gamepad1.left_bumper) {
             one.setPosition(one_pos-.5);
             two.setPosition(.5);
         }
-        if (gamepad2.x) {
+        //bottom servos
+        if (gamepad1.right_trigger > 0) {
             three.setPower(.5);
             four.setPower(-.5);
         }
-        else if (gamepad2.y){
+        else if (gamepad1.left_trigger <= 0){
             three.setPower(-.5);
             four.setPower(.5);
         }
@@ -66,52 +68,30 @@ public class JustFuckinAllOfIt extends OpMode{
             three.setPower(0);
             four.setPower(0);
         }
+        //extend
         if (gamepad2.dpad_down){
-            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            telemetry.addData("lift position: ", lift.getCurrentPosition());
-            if (!wasChangingTargetPos){
-                targetPosForLift -= 100;
-                lift.setTargetPosition(targetPosForLift);
-                wasChangingTargetPos = true;
-            }
-
-            //lift.setPower(-.5);
-        }
-        else if (gamepad2.dpad_up){
-            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            telemetry.addData("lift position: ", lift.getCurrentPosition());
-            if (!wasChangingTargetPos){
-                targetPosForLift += 100;
-                lift.setTargetPosition(targetPosForLift);
-                wasChangingTargetPos = true;
-            }
-
-            //lift.setPower(.5);
-        }
-        else{
-            lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            targetPosForLift = 0;
-            lift.setPower(0);
-            wasChangingTargetPos = false;
-        }
-        if (gamepad2.a){
-            r1.setPower(.5);
-        }
-        else if (gamepad2.b){
             r1.setPower(-.5);
         }
-        if (gamepad1.a){
+        else if (gamepad2.dpad_up){
+            r1.setPower(.5);
+        }
+        else{
+            r1.setPower(0);
+        }
+        //lift robot
+        if (gamepad2.b){
             r2.setPower(.5);
         }
-        else if (gamepad1.b){
+        else if (gamepad2.y){
             r2.setPower(-.5);
         }
-        if (gamepad1.x){
-            r3.setPower(.5);
+        else{
+            r2.setPower(0);
         }
-        else if (gamepad1.y){
-            r3.setPower(-.5);
-        }
+        //spool
+        r3.setPower(gamepad2.left_stick_y);
+        //glyph lift
+        lift.setPower(gamepad2.right_stick_y);
 
         telemetry.addData("position 1", one.getPosition());
         telemetry.addData("position 2", two.getPosition());
