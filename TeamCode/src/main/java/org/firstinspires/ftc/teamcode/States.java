@@ -39,14 +39,14 @@ public class States extends LinearOpMode {
     OpenGLMatrix lastLocation = null;
 
     private final double absoluteMaxPower = 0.5, ARMTARGETPOS = 0.3;
-    private double tPlaceRelic, oPosition;
+    private double tPlaceRelic, POWER = 0.5;
     private int state = 0;
 
     manyStates multipleStates;
 
     DcMotor lf, lb, rf, rb;
 
-    Servo arm;
+    CRServo arm;
     ColorSensor color;
 
     private enum manyStates {
@@ -120,13 +120,18 @@ public class States extends LinearOpMode {
         lb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        arm = hardwareMap.servo.get("arm");
+        arm = hardwareMap.crservo.get("arm");
         color = hardwareMap.colorSensor.get("color");
 
+<<<<<<< HEAD
         oPosition = arm.getPosition();
 
         //bL = hardwareMap.crservo.get("bL");
         //bR = hardwareMap.crservo.get("bR");
+=======
+        //three = hardwareMap.crservo.get("three");
+        //four = hardwareMap.crservo.get("four");
+>>>>>>> origin/master
 
         //lift = hardwareMap.dcMotor.get("lift");
 
@@ -137,21 +142,23 @@ public class States extends LinearOpMode {
 
     public void moveArmLoop(){
 
-        arm.setPosition(oPosition+ARMTARGETPOS);
+        arm.setPower(POWER);
+        sleep(1500);
         telemetry.addData("Red: ", color.red());
         telemetry.addData("Blue: ", color.blue());
-        telemetry.addData("Arm position: ", arm.getPosition());
-        sleep(1000);
+        telemetry.addData("Arm position: ", arm.getPower());
         if (color.blue()/2 > color.red()) {
             setPowers(0,absoluteMaxPower,0);
-            sleep(200);
-            arm.setPosition(oPosition);
+            sleep(300);
+            arm.setPower(-POWER);
+            sleep(1500);
         }
 
         if (color.blue() < color.red()/2) {
             setPowers(0,-absoluteMaxPower,0);
-            sleep(200);
-            arm.setPosition(oPosition);
+            sleep(300);
+            arm.setPower(-POWER);
+            sleep(1500);
         }
         else{
             setPowers(0,0,0);
