@@ -42,7 +42,7 @@ public class States extends LinearOpMode {
     private double tPlaceRelic, POWER = 0.5;
     private int state = 0;
 
-    manyStates multipleStates;
+    manyStates multipleStates = manyStates.STATE_MOVEARM;
 
     DcMotor lf, lb, rf, rb;
 
@@ -69,17 +69,18 @@ public class States extends LinearOpMode {
                 case STATE_REST:
                     setPowers(0,0,0);
                 case STATE_MOVEARM:
+                    sleep(1000);
                     moveArmLoop();
+                    sleep(5000);
                     multipleStates = manyStates.STATE_IMAGE;
                     break;
                 case STATE_IMAGE:
                     look(relicImage);
+                    sleep(3000);
                     multipleStates = manyStates.STATE_DRIVEFAR;
                     break;
                 case STATE_DRIVEFAR:
-                    setPowers(absoluteMaxPower,0,0);
-                    VuforiaTrackable newImage = setUpOtherCamera();
-                    look(newImage);
+                    setPowers(0,absoluteMaxPower,0);
                     multipleStates = manyStates.STATE_TURN;
                     sleep((int)(tPlaceRelic*1000));
                     break;
@@ -123,15 +124,8 @@ public class States extends LinearOpMode {
         arm = hardwareMap.crservo.get("arm");
         color = hardwareMap.colorSensor.get("color");
 
-<<<<<<< HEAD
-        oPosition = arm.getPosition();
-
-        //bL = hardwareMap.crservo.get("bL");
-        //bR = hardwareMap.crservo.get("bR");
-=======
         //three = hardwareMap.crservo.get("three");
         //four = hardwareMap.crservo.get("four");
->>>>>>> origin/master
 
         //lift = hardwareMap.dcMotor.get("lift");
 
@@ -141,24 +135,18 @@ public class States extends LinearOpMode {
 
 
     public void moveArmLoop(){
-
-        arm.setPower(POWER);
-        sleep(1500);
+        arm.setPower(-POWER);
         telemetry.addData("Red: ", color.red());
         telemetry.addData("Blue: ", color.blue());
-        telemetry.addData("Arm position: ", arm.getPower());
+        telemetry.addData("Arm power: ", arm.getPower());
         if (color.blue()/2 > color.red()) {
             setPowers(0,absoluteMaxPower,0);
-            sleep(300);
-            arm.setPower(-POWER);
-            sleep(1500);
+            arm.setPower(POWER/2);
         }
 
         if (color.blue() < color.red()/2) {
             setPowers(0,-absoluteMaxPower,0);
-            sleep(300);
-            arm.setPower(-POWER);
-            sleep(1500);
+            arm.setPower(POWER/2);
         }
         else{
             setPowers(0,0,0);
@@ -170,6 +158,7 @@ public class States extends LinearOpMode {
 
     public double look(VuforiaTrackable relicImage){
         RelicRecoveryVuMark goal = lookForRelicImage(relicImage);
+        telemetry.addData("Goal: ", goal);
         sleep(100);
         if (goal.equals(RelicRecoveryVuMark.LEFT)){
             state = 2;
@@ -222,8 +211,8 @@ public class States extends LinearOpMode {
         this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
 
         /**
-         * Load the data set containing the VuMarks for Relic Recovery. There's only tL trackable
-         *  in this data set: all bL of the VuMarks in the game were created from this tL template,
+         * Load the data set containing the VuMarks for Relic Recovery. There's only one trackable
+         *  in this data set: all three of the VuMarks in the game were created from this one template,
          * but differ in their instance id information.
          * @see VuMarkInstanceId
          */
@@ -276,8 +265,8 @@ public class States extends LinearOpMode {
         this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
 
         /**
-         * Load the data set containing the VuMarks for Relic Recovery. There's only tL trackable
-         *  in this data set: all bL of the VuMarks in the game were created from this tL template,
+         * Load the data set containing the VuMarks for Relic Recovery. There's only one trackable
+         *  in this data set: all three of the VuMarks in the game were created from this one template,
          * but differ in their instance id information.
          * @see VuMarkInstanceId
          */

@@ -23,15 +23,19 @@ public class SquareBotTeleOp extends OpMode {
 
     GamepadV2 pad1 = new GamepadV2();
 
-    double oPos, cPos;
-    boolean previously;
-    final double INCREMENT = 0.1, POWER = 0.5;
+    final double POWER = 0.9;
 
 
 
     @Override
     public void init() {
         mechanumInit();
+        lf.setPower(0);
+        rf.setPower(0);
+        lb.setPower(0);
+        rb.setPower(0);
+
+
         arm = hardwareMap.crservo.get("arm");
         color = hardwareMap.colorSensor.get("color");
 
@@ -43,21 +47,14 @@ public class SquareBotTeleOp extends OpMode {
         mechanumLoop();
         if (pad1.left_bumper){
             arm.setPower(POWER);
-            cPos = oPos;
-            previously = false;
         }
         else if (pad1.right_bumper){
-            if (!previously){
-                cPos += INCREMENT;
-                arm.setPower(POWER);
-            }
-            previously = true;
+            arm.setPower(-POWER);
         }
         else {
-            previously = false;
+            arm.setPower(0);
         }
-        telemetry.addData("Arm position: ", arm.getPower());
-        telemetry.addData("Supposedly at: ", cPos);
+        telemetry.addData("Arm power: ", arm.getPower());
 
     }
 
