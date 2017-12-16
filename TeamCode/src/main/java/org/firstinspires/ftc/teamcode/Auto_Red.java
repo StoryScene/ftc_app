@@ -43,9 +43,6 @@ public class Auto_Red extends LinearOpMode {
         arm = hardwareMap.crservo.get("arm");
         color = hardwareMap.colorSensor.get("color");
 
-        fL.setDirection(DcMotor.Direction.REVERSE);
-        //left.setDirection(Servo.Direction.REVERSE);
-        bL.setDirection(DcMotor.Direction.REVERSE);
 
         double POWER = .5;
 
@@ -76,7 +73,7 @@ public class Auto_Red extends LinearOpMode {
                 telemetry.addData("HELLO: ", arm.getPower());
                 sleep(2000);
                 arm.setPower(0);
-                setPowers(0,-0.8,0);
+                //setPowers(0,-0.8,0);
                 sleep(8000);
                 setPowers(0,0,0);
                 sleep(30000);
@@ -92,7 +89,7 @@ public class Auto_Red extends LinearOpMode {
                 telemetry.addData("HELLO: ", arm.getPower());
                 sleep(2000);
                 arm.setPower(0);
-                setPowers(0,-0.8,0);
+                //setPowers(0,-0.8,0);
                 sleep(6000);
                 setPowers(0,0,0);
                 sleep(30000);
