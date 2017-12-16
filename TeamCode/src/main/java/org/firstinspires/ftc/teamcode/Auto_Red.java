@@ -67,8 +67,8 @@ public class Auto_Red extends LinearOpMode {
             if (color.blue()/2 > color.red()) {
                 arm.setPower(0);
                 telemetry.addData("Current arm power: ", arm.getPower());
-                setPowers(0,-0.5,0);
-                sleep(500);
+                setPowers(0,0.8,0);
+                sleep(1000);
                 telemetry.addData("Here :) ", arm.getPower());
 
                 setPowers(0,0,0);
@@ -76,24 +76,24 @@ public class Auto_Red extends LinearOpMode {
                 telemetry.addData("HELLO: ", arm.getPower());
                 sleep(2000);
                 arm.setPower(0);
-                setPowers(0,0.5,0);
-                sleep(4000);
+                setPowers(0,-0.8,0);
+                sleep(8000);
                 setPowers(0,0,0);
                 sleep(30000);
             }
             if (color.blue() < color.red()/2) {
                 arm.setPower(0);
                 telemetry.addData("Current arm power: ", arm.getPower());
-                setPowers(0,0.5,0);
-                sleep(500);
+                setPowers(0,-0.8,0);
+                sleep(1000);
                 telemetry.addData("Here :) ", arm.getPower());
                 setPowers(0,0,0);
                 arm.setPower(-0.5);
                 telemetry.addData("HELLO: ", arm.getPower());
                 sleep(2000);
                 arm.setPower(0);
-                setPowers(0,0.5,0);
-                sleep(3000);
+                setPowers(0,-0.8,0);
+                sleep(6000);
                 setPowers(0,0,0);
                 sleep(30000);
             }
