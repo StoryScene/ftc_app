@@ -27,10 +27,10 @@ public class MecanumTest1617 extends OpMode {
         backLeft = hardwareMap.dcMotor.get("backLeft");
         backRight = hardwareMap.dcMotor.get("backRight");
 
-        servo1 = hardwareMap.servo.get("one");
-        servo2 = hardwareMap.servo.get("two");
-        servo3 = hardwareMap.crservo.get("three");
-        servo4 = hardwareMap.servo.get("four");
+        servo1 = hardwareMap.servo.get("tL");
+        servo2 = hardwareMap.servo.get("tR");
+        servo3 = hardwareMap.crservo.get("bL");
+        servo4 = hardwareMap.servo.get("bR");
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);

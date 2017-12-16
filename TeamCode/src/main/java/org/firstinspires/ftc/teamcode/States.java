@@ -125,8 +125,8 @@ public class States extends LinearOpMode {
 
         oPosition = arm.getPosition();
 
-        //three = hardwareMap.crservo.get("three");
-        //four = hardwareMap.crservo.get("four");
+        //bL = hardwareMap.crservo.get("bL");
+        //bR = hardwareMap.crservo.get("bR");
 
         //lift = hardwareMap.dcMotor.get("lift");
 
@@ -215,8 +215,8 @@ public class States extends LinearOpMode {
         this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
 
         /**
-         * Load the data set containing the VuMarks for Relic Recovery. There's only one trackable
-         *  in this data set: all three of the VuMarks in the game were created from this one template,
+         * Load the data set containing the VuMarks for Relic Recovery. There's only tL trackable
+         *  in this data set: all bL of the VuMarks in the game were created from this tL template,
          * but differ in their instance id information.
          * @see VuMarkInstanceId
          */
@@ -269,8 +269,8 @@ public class States extends LinearOpMode {
         this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
 
         /**
-         * Load the data set containing the VuMarks for Relic Recovery. There's only one trackable
-         *  in this data set: all three of the VuMarks in the game were created from this one template,
+         * Load the data set containing the VuMarks for Relic Recovery. There's only tL trackable
+         *  in this data set: all bL of the VuMarks in the game were created from this tL template,
          * but differ in their instance id information.
          * @see VuMarkInstanceId
          */

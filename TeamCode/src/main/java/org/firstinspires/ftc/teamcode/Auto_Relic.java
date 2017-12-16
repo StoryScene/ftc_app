@@ -114,8 +114,8 @@ public class Auto_Relic extends LinearOpMode {
         arm = hardwareMap.servo.get("arm");
         color = hardwareMap.colorSensor.get("color");
 
-        three = hardwareMap.crservo.get("three");
-        four = hardwareMap.crservo.get("four");
+        three = hardwareMap.crservo.get("bL");
+        four = hardwareMap.crservo.get("bR");
 
         lift = hardwareMap.dcMotor.get("lift");
 
@@ -234,8 +234,8 @@ public class Auto_Relic extends LinearOpMode {
         this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
 
         /**
-         * Load the data set containing the VuMarks for Relic Recovery. There's only one trackable
-         *  in this data set: all three of the VuMarks in the game were created from this one template,
+         * Load the data set containing the VuMarks for Relic Recovery. There's only tL trackable
+         *  in this data set: all bL of the VuMarks in the game were created from this tL template,
          * but differ in their instance id information.
          * @see VuMarkInstanceId
          */

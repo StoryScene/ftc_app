@@ -25,10 +25,10 @@ public class FourServosOrTwoServos extends OpMode{
     @Override
     public void init() {
 
-        one = hardwareMap.servo.get("one");
-        two = hardwareMap.servo.get("two");
-        three = hardwareMap.crservo.get("three");
-        four = hardwareMap.crservo.get("four");
+        one = hardwareMap.servo.get("tL");
+        two = hardwareMap.servo.get("tR");
+        three = hardwareMap.crservo.get("bL");
+        four = hardwareMap.crservo.get("bR");
 
         lift = hardwareMap.dcMotor.get("lift");
 

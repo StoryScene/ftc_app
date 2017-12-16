@@ -17,9 +17,9 @@ public class MecAndArm extends OpMode {
 
     @Override
     public void init() {
-        motorOne = hardwareMap.dcMotor.get("one");
-        motorTwo = hardwareMap.dcMotor.get("two");
-        motorTres = hardwareMap.dcMotor.get("three");
+        motorOne = hardwareMap.dcMotor.get("tL");
+        motorTwo = hardwareMap.dcMotor.get("tR");
+        motorTres = hardwareMap.dcMotor.get("bL");
         //servo = hardwareMap.servo.get("servo");
 
         mechanumInit();

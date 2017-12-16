@@ -31,18 +31,18 @@ public class FourServosAndEightMotors extends OpMode{
     @Override
     public void init() {
 
-        one = hardwareMap.servo.get("one");
-        two = hardwareMap.servo.get("two");
-        three = hardwareMap.crservo.get("three");
-        four = hardwareMap.crservo.get("four");
+        one = hardwareMap.servo.get("tL");
+        two = hardwareMap.servo.get("tR");
+        three = hardwareMap.crservo.get("bL");
+        four = hardwareMap.crservo.get("bR");
 
         lift = hardwareMap.dcMotor.get("lift");
 
         mechanumInit();
 
-        motorOne = hardwareMap.dcMotor.get("one");
-        motorTwo = hardwareMap.dcMotor.get("two");
-        motorTres = hardwareMap.dcMotor.get("three");
+        motorOne = hardwareMap.dcMotor.get("tL");
+        motorTwo = hardwareMap.dcMotor.get("tR");
+        motorTres = hardwareMap.dcMotor.get("bL");
 
     }
     //push
@@ -168,7 +168,7 @@ public class FourServosAndEightMotors extends OpMode{
         telemetry.addData("maxPower: ", maxPower);
 
 
-        //The three motor part
+        //The bL motor part
 
         pad1.update(gamepad1);
 

@@ -125,8 +125,8 @@ public class SquareBotWithEyes extends LinearOpMode {
         arm = hardwareMap.servo.get("arm");
         color = hardwareMap.colorSensor.get("color");
 
-        three = hardwareMap.crservo.get("three");
-        four = hardwareMap.crservo.get("four");
+        bL = hardwareMap.crservo.get("bL");
+        bR = hardwareMap.crservo.get("bR");
 
         lift = hardwareMap.dcMotor.get("lift");
 

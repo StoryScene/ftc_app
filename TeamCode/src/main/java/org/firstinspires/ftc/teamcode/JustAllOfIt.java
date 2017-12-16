@@ -15,8 +15,8 @@ import org.firstinspires.ftc.teamcode.modules.GamepadV2;
 
 @TeleOp
 public class JustAllOfIt extends OpMode{
-    Servo one, two;
-    CRServo three, four;
+    Servo tR, bL, bR;
+    CRServo tL;
     DcMotor lf, rf, lb, rb;
     DcMotor lift;
     DcMotor r1, r2, r3;
@@ -27,10 +27,10 @@ public class JustAllOfIt extends OpMode{
 
     @Override
     public void init() {
-        one = hardwareMap.servo.get("one");
-        two = hardwareMap.servo.get("two");
-        three = hardwareMap.crservo.get("three");
-        four = hardwareMap.crservo.get("four");
+        tR= hardwareMap.servo.get("tL");
+        tR = hardwareMap.crservo.get("tR");
+        bR = hardwareMap.servo.get("bL");
+        bL = hardwareMap.servo.get("bR");
 
         r1 = hardwareMap.dcMotor.get("r1");
         r2 = hardwareMap.dcMotor.get("r2");
@@ -44,29 +44,34 @@ public class JustAllOfIt extends OpMode{
 
     @Override
     public void loop() {
-        double one_pos = one.getPosition();
 
-        //top servos
-        if (gamepad1.right_bumper) {
-            one.setPosition(one_pos+.5);
-            two.setPosition(-.5);
+        //servos
+        //CR
+        if (gamepad1.a){
+            tR.setPower(1);
         }
-        if (gamepad1.left_bumper) {
-            one.setPosition(one_pos-.5);
-            two.setPosition(.5);
-        }
-        //bottom servos
-        if (gamepad1.right_trigger > 0) {
-            three.setPower(.5);
-            four.setPower(-.5);
-        }
-        else if (gamepad1.left_trigger <= 0){
-            three.setPower(-.5);
-            four.setPower(.5);
+        else if (gamepad1.b){
+            tR.setPower(-1);
         }
         else{
-            three.setPower(0);
-            four.setPower(0);
+            tR.setPower(0);
+        }
+
+        //180
+        if (gamepad1.y){
+            bL.setPosition(.75);
+            bR.setPosition(- .75);
+        }
+        else if (gamepad1.x){
+            bL.setPosition(-.75);
+            bR.setPosition(.75);
+        }
+
+        if (gamepad1.a){
+            tL.setPosition(-1);
+        }
+        else if (gamepad1.b){
+            tL.setPosition(.75);
         }
         //extend
         if (gamepad2.dpad_down){
@@ -93,8 +98,8 @@ public class JustAllOfIt extends OpMode{
         //glyph lift
         lift.setPower(gamepad2.right_stick_y);
 
-        telemetry.addData("position 1", one.getPosition());
-        telemetry.addData("position 2", two.getPosition());
+        telemetry.addData("position 1", tL.getPosition());
+        telemetry.addData("position 2", tR.getPower() );
 
         mechanumLoop();
         telemetry.addData("Power of lf, rf, lb, rb:\n", lf.getPower() + "\n" + rf.getPower()
