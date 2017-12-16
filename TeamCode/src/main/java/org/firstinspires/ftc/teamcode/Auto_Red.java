@@ -60,7 +60,7 @@ public class Auto_Red extends LinearOpMode {
         while (opModeIsActive()) {
 
 
-            arm.setPower(-0.5);
+            arm.setPower(0.5);
             telemetry.addData("Current arm power: ", arm.getPower());
 
 
@@ -72,7 +72,7 @@ public class Auto_Red extends LinearOpMode {
                 telemetry.addData("Here :) ", arm.getPower());
 
                 setPowers(0,0,0);
-                arm.setPower(0.5);
+                arm.setPower(-0.5);
                 telemetry.addData("HELLO: ", arm.getPower());
                 sleep(2000);
                 arm.setPower(0);
@@ -88,7 +88,7 @@ public class Auto_Red extends LinearOpMode {
                 sleep(500);
                 telemetry.addData("Here :) ", arm.getPower());
                 setPowers(0,0,0);
-                arm.setPower(0.5);
+                arm.setPower(-0.5);
                 telemetry.addData("HELLO: ", arm.getPower());
                 sleep(2000);
                 arm.setPower(0);
@@ -116,8 +116,7 @@ public class Auto_Red extends LinearOpMode {
             y = 0;
         }
 
-        double rot = rotation;
-
+        double rot = Range.clip(rotation, -1, 1);
 
         double r = Math.hypot(x, y);
         double angle = 0.0;
@@ -128,6 +127,11 @@ public class Auto_Red extends LinearOpMode {
         if (r > 0.1){
             angle = Math.atan2(y,x) - Math.PI / 4;
         }
+
+        telemetry.addData("angle: ", angle);
+        telemetry.addData("radius: ", r);
+        telemetry.addData("rotate: ", rot);
+
 
         double vlf = r * Math.cos(angle) + rot;
         double vrf = r * Math.sin(angle) - rot;
@@ -141,12 +145,13 @@ public class Auto_Red extends LinearOpMode {
         vlb /= maxPower;
         vrb /= maxPower;
 
+        fL.setPower(0.5*Math.pow(POW,2) * Range.clip(vlf, -1, 1));
+        fR.setPower(-0.5*Math.pow(POW,2) * Range.clip(vrf, -1, 1));
+        bL.setPower(0.5*Math.pow(POW,2) * Range.clip(vlb, -1, 1));
+        bR.setPower(-0.5*Math.pow(POW,2) * Range.clip(vrb, -1, 1));
 
-        fL.setPower(Math.pow(POW,2) * Range.clip(vlf, -1, 1));
-        fR.setPower(-Math.pow(POW,2) * Range.clip(vrf, -1, 1));
-        bL.setPower(Math.pow(POW,2) * Range.clip(vlb, -1, 1));
-        bR.setPower(-Math.pow(POW,2) * Range.clip(vrb, -1, 1));
 
+        telemetry.addData("maxPower: ", maxPower);
     }
 
     private double maxPow(double x, double y, double z, double w) {
