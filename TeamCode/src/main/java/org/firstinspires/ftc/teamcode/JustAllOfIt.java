@@ -15,8 +15,7 @@ import org.firstinspires.ftc.teamcode.modules.GamepadV2;
 
 @TeleOp
 public class JustAllOfIt extends OpMode{
-    Servo tR, bL, bR;
-    CRServo tL;
+    Servo tR, bL, tL, bR;
     DcMotor lf, rf, lb, rb;
     DcMotor lift;
     DcMotor r1, r2, r3;
@@ -27,8 +26,8 @@ public class JustAllOfIt extends OpMode{
 
     @Override
     public void init() {
-        tR= hardwareMap.servo.get("tL");
-        tR = hardwareMap.crservo.get("tR");
+        tR= hardwareMap.servo.get("tR");
+        tL = hardwareMap.servo.get("tL");
         bR = hardwareMap.servo.get("bL");
         bL = hardwareMap.servo.get("bR");
 
@@ -46,32 +45,22 @@ public class JustAllOfIt extends OpMode{
     public void loop() {
 
         //servos
-        //CR
-        if (gamepad1.a){
-            tR.setPower(1);
+        if (gamepad1.b){
+            bL.setPosition(1);
+            bR.setPosition(-.75);
         }
-        else if (gamepad1.b){
-            tR.setPower(-1);
-        }
-        else{
-            tR.setPower(0);
-        }
-
-        //180
-        if (gamepad1.y){
-            bL.setPosition(.75);
-            bR.setPosition(- .75);
-        }
-        else if (gamepad1.x){
+        else if (gamepad1.a){
             bL.setPosition(-.75);
             bR.setPosition(.75);
         }
 
-        if (gamepad1.a){
-            tL.setPosition(-1);
-        }
-        else if (gamepad1.b){
+        if (gamepad1.x){
+            tR.setPosition(-1);
             tL.setPosition(.75);
+        }
+        else if (gamepad1.y){
+            tR.setPosition(.75);
+            tL.setPosition(-.75);
         }
         //extend
         if (gamepad2.dpad_down){
@@ -96,10 +85,10 @@ public class JustAllOfIt extends OpMode{
         //spool
         r3.setPower(gamepad2.left_stick_y);
         //glyph lift
-        lift.setPower(gamepad2.right_stick_y);
+        lift.setPower(-1*gamepad2.right_stick_y);
 
-        telemetry.addData("position 1", tL.getPosition());
-        telemetry.addData("position 2", tR.getPower() );
+        telemetry.addData("position 1", tR.getPosition());
+        telemetry.addData("position 2", tL.getPosition() );
 
         mechanumLoop();
         telemetry.addData("Power of lf, rf, lb, rb:\n", lf.getPower() + "\n" + rf.getPower()
@@ -134,8 +123,8 @@ public class JustAllOfIt extends OpMode{
 
     private void mechanumLoop() {
         pad1.update(gamepad1);
-        double x = Range.clip(gamepad1.left_stick_x, -1, 1);
-        double y = - Range.clip(gamepad1.left_stick_y, -1, 1);
+        double x = -Range.clip(gamepad1.left_stick_x, -1, 1);
+        double y =  Range.clip(gamepad1.left_stick_y, -1, 1);
 
         if (Math.abs(x) < 0.1) {
             x = 0;
@@ -173,10 +162,10 @@ public class JustAllOfIt extends OpMode{
         vlb /= maxPower;
         vrb /= maxPower;
 
-        lf.setPower(0.6*Math.pow(POW,2) * Range.clip(vlf, -1, 1));
-        rf.setPower(0.6*-Math.pow(POW,2) * Range.clip(vrf, -1, 1));
-        lb.setPower(0.6*Math.pow(POW,2) * Range.clip(vlb, -1, 1));
-        rb.setPower(0.6*-Math.pow(POW,2) * Range.clip(vrb, -1, 1));
+        lf.setPower(0.4*Math.pow(POW,2) * Range.clip(vlf, -1, 1));
+        rf.setPower(0.4*-Math.pow(POW,2) * Range.clip(vrf, -1, 1));
+        lb.setPower(0.4*Math.pow(POW,2) * Range.clip(vlb, -1, 1));
+        rb.setPower(0.4 *-Math.pow(POW,2) * Range.clip(vrb, -1, 1));
 
 
         telemetry.addData("maxPower: ", maxPower);
