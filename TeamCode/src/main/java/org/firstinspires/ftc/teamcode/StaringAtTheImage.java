@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -21,12 +21,16 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 /**
- * Created by Emma on 12/15/17.
+ * Created by Emma on 12/18/17.
  */
 
-@TeleOp
-public class WhatIfThisWorks extends LinearOpMode {
+@Autonomous
+public class StaringAtTheImage extends LinearOpMode {
+
 
     // Largely copied from Auto Red
     // Wait no it won't because um idk how to \put down glyphs
@@ -35,130 +39,96 @@ public class WhatIfThisWorks extends LinearOpMode {
     DcMotor bL;
     DcMotor fR;
     DcMotor bR;
-    //DcMotor lS;
-    //Servo left;
-    //Servo right;
-    CRServo arm;
-    ColorSensor color;
+
+    final double[] targetCoords = {0.1,0,-400};
+
+    final double maxPower = 0.6;
 
 
+    public static final String TAG = "Vuforia VuMark Sample";
+    OpenGLMatrix lastLocation = null;
+
+
+    private double distance = 4000;
+
+
+    @Override
     public void runOpMode() throws InterruptedException {
 
         fL = hardwareMap.dcMotor.get("leftF");
         bL = hardwareMap.dcMotor.get("leftB");
         fR = hardwareMap.dcMotor.get("rightF");
         bR = hardwareMap.dcMotor.get("rightB");
-        //lS = hardwareMap.dcMotor.get("linearSlide");
-        //left = hardwareMap.servo.get("left");
-        //right = hardwareMap.servo.get("right");
-        arm = hardwareMap.crservo.get("arm");
-        color = hardwareMap.colorSensor.get("color");
 
-
-        double POWER = .5;
-
-        //left.setPosition(0);
-        //right.setPosition(0);
-
-        telemetry.addData("Red: ", color.red());
-        telemetry.addData("Blue: ", color.blue());
+        VuforiaTrackable relicImage = setUpVuforia();
 
         waitForStart();
+        boolean prepared = false;
+        setPowers(0,0,0);
 
         while (opModeIsActive()) {
+
+            ArrayList vuMarkAndPos = lookForRelicImage(relicImage);
+            RelicRecoveryVuMark vu = (RelicRecoveryVuMark) vuMarkAndPos.get(0);
+            float[] pos = (float[]) vuMarkAndPos.get(1);
+
+            // While only pos[2], pos[12] and pos[14] are useful.
+            // 2 is the angle  (looking to the left is positive)
+            // 12 is the distance (left/right)  (left is negative)
+            // 14 is the distance (front/back)  (away from photo is negative)
+
+            float[] usefulCoords = {pos[2], pos[12], pos[14]};
+
+            double xx=0, yy=0, rot=0;
+            // K I'm not sure about any of these but thinking about them is difficult hh
+            if (!prepared){
+                if (vu == vu.UNKNOWN){
+                    setPowers(0,0,0);
+                }
+                else if (Math.abs(usefulCoords[0] - targetCoords[0]) > 0.1){
+                    rot = maxPower*Math.signum(Math.abs(usefulCoords[0] - targetCoords[0]));
+                    yy = 0;
+                    xx = 0;
+
+                }
+                else if (Math.abs(usefulCoords[1] - targetCoords[1]) > 10){
+                    yy = maxPower*Math.signum(Math.abs(usefulCoords[1] - targetCoords[1]));
+                    xx = 0;
+                    rot = 0;
+                }
+                else if (Math.abs(usefulCoords[2] - targetCoords[2]) > 10){
+                    xx = maxPower*Math.signum(Math.abs(usefulCoords[2] - targetCoords[2]));
+                    yy = 0;
+                    rot = 0;
+                }
+                else {
+                    if (usefulCoords[0] != targetCoords[0] || usefulCoords[1] != targetCoords[1] || usefulCoords[2] != targetCoords[2]){
+                        prepared = true;
+                    }
+                    xx = 0;
+                    yy = 0;
+                    rot = 0;
+                }
+            }
+
+            setPowers(xx,yy,rot);
+
+            telemetry.addData("Powers: ", xx + " " + yy + " " + rot);
+
+            if (vu == vu.RIGHT){
+                distance = 4000;
+            }
+            else if (vu == vu.CENTER){
+                distance = 4500;
+            }
+            else if (vu == vu.LEFT){
+                distance = 5000;
+            }
+            telemetry.addData("Dis: ", distance);
+            telemetry.addData("Actual powers: ", fL.getPower()+ " " +  fR.getPower() + " " + bL.getPower() + " " + bR.getPower());
             telemetry.update();
-            arm.setPower(0.5);
-            telemetry.addData("Current arm power: ", arm.getPower());
-
-            moveArm();
-
-            VuforiaTrackable relicImage = setUpVuforia();
-            RelicRecoveryVuMark goal = lookForRelicImage(relicImage);
-
-
-            double RUNAWAY = 2;
-            if (goal.equals(RelicRecoveryVuMark.LEFT)){
-                RUNAWAY = 2;
-            }
-            else if (goal.equals(RelicRecoveryVuMark.CENTER)) {
-                RUNAWAY = 3;
-            }
-            else if (goal.equals(RelicRecoveryVuMark.RIGHT)) {
-                RUNAWAY = 4;
-            }
-
-            setPowers(0,0.6,0);
-            sleep((int)(1000*(RUNAWAY+8)));
-
-            setPowers(0,0,0.8);
-            sleep(2000);
-
-            setPowers(0,1,0);
-            sleep(1000);
-
-            setPowers(0,0,0);
-            sleep(30000);
-
 
         }
-    }
-
-    public void setPowers(double xx, double yy, double rotation) {
-        double x = Range.clip(xx, -1, 1);
-        double y = - Range.clip(yy, -1, 1);
-
-        if (Math.abs(x) < 0.1) {
-            x = 0;
-        }
-        if (Math.abs(y) < 0.1) {
-            y = 0;
-        }
-
-        double rot = Range.clip(rotation, -1, 1);
-
-        double r = Math.hypot(x, y);
-        double angle = 0.0;
-
-        double POW = Math.max(Math.hypot(x, y), Math.abs(rot));
-
-
-        if (r > 0.1){
-            angle = Math.atan2(y,x) - Math.PI / 4;
-        }
-
-        telemetry.addData("angle: ", angle);
-        telemetry.addData("radius: ", r);
-        telemetry.addData("rotate: ", rot);
-
-
-        double vlf = r * Math.cos(angle) + rot;
-        double vrf = r * Math.sin(angle) - rot;
-        double vlb = r * Math.sin(angle) + rot;
-        double vrb = r * Math.cos(angle) - rot;
-
-        double maxPower = maxPow(vlf, vrf, vlb, vrb);
-
-        vlf /= maxPower;
-        vrf /= maxPower;
-        vlb /= maxPower;
-        vrb /= maxPower;
-
-        fL.setPower(0.5*Math.pow(POW,2) * Range.clip(vlf, -1, 1));
-        fR.setPower(-0.5*Math.pow(POW,2) * Range.clip(vrf, -1, 1));
-        bL.setPower(0.5*Math.pow(POW,2) * Range.clip(vlb, -1, 1));
-        bR.setPower(-0.5*Math.pow(POW,2) * Range.clip(vrb, -1, 1));
-
-
-        telemetry.addData("maxPower: ", maxPower);
-    }
-
-
-    private double maxPow(double x, double y, double z, double w) {
-        x = Math.abs(x);
-        y = Math.abs(y);
-        z = Math.abs(z);
-        w = Math.abs(w);
-        return Math.max(Math.max(x,y), Math.max(z,w));
     }
 
 
@@ -221,7 +191,7 @@ public class WhatIfThisWorks extends LinearOpMode {
         return relicTemplate;
     }
 
-    public RelicRecoveryVuMark lookForRelicImage(VuforiaTrackable relicTemplate) {
+    public ArrayList<Object> lookForRelicImage(VuforiaTrackable relicTemplate) {
         /**
          * See if any of the instances of {@link relicTemplate} are currently visible.
          * {@link RelicRecoveryVuMark} is an enum which can have the following values:
@@ -229,6 +199,7 @@ public class WhatIfThisWorks extends LinearOpMode {
          * UNKNOWN will be returned by {@link RelicRecoveryVuMark#from(VuforiaTrackable)}.
          */
         RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
+        float[] loc = new float[16];
         if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
 
                 /* Found an instance of the template. In the actual game, you will probably
@@ -242,8 +213,9 @@ public class WhatIfThisWorks extends LinearOpMode {
                  * we illustrate it nevertheless, for completeness. */
             OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)relicTemplate.getListener()).getPose();
             telemetry.addData("Pose", format(pose));
-            float[] test = pose.getData();
-            telemetry.addData("coords:", test[0] + " " + test[1] + " " + test[2]);
+            loc = pose.getData();
+            telemetry.addData("3, 13, 15: ", loc[2] + " " + loc[12] + " " + loc[14]);
+
 
                 /* We further illustrate how to decompose the pose into useful rotational and
                  * translational components */
@@ -266,61 +238,67 @@ public class WhatIfThisWorks extends LinearOpMode {
             telemetry.addData("VuMark", "not visible");
         }
 
-        telemetry.update();
-        return vuMark;
+        ArrayList<Object> result = new ArrayList<>();
+        result.add(vuMark);
+        result.add(loc);
+        return result;
     }
 
-    private void adjustPos(){
 
-    }
+    public void setPowers(double xx, double yy, double rotation) {
+        double x = Range.clip(xx, -1, 1);
+        double y = - Range.clip(yy, -1, 1);
 
-    private void moveArm(){
-
-        arm.setPower(0.5);
-        sleep(1000);
-        setPowers(0,0,0);
-        telemetry.addData("Current arm power: ", arm.getPower());
-
-
-        if (color.blue()/2 > color.red()) {
-            arm.setPower(0);
-            setPowers(0,0,0.8);
-            sleep(400);
-            setPowers(0,0,0);
-            sleep(500);
-
-            arm.setPower(-0.5);
-            sleep(2000);
-            arm.setPower(0);
-            sleep(1000);
-
-            setPowers(0,0,-0.8);
-            sleep(400);
-            //now it should be back at the original position
-            setPowers(0,0,0);
-            sleep(1000);
+        if (Math.abs(x) < 0.1) {
+            x = 0;
+        }
+        if (Math.abs(y) < 0.1) {
+            y = 0;
         }
 
-        if (color.blue() < color.red()/2) {
-            arm.setPower(0);
-            setPowers(0,0,-0.8);
-            sleep(400);
-            setPowers(0,0,0);
-            sleep(500);
+        double rot = Range.clip(rotation, -1, 1);
+
+        double r = Math.hypot(x, y);
+        double angle = 0.0;
+
+        double POW = Math.max(Math.hypot(x, y), Math.abs(rot));
 
 
-            arm.setPower(-0.5);
-            sleep(2000);
-            arm.setPower(0);
-            sleep(1000);
-
-            setPowers(0,0,0.8);
-            sleep(400);
-            setPowers(0,0,0);
-            sleep(1000);
+        if (r > 0.1){
+            angle = Math.atan2(y,x) - Math.PI / 4;
         }
 
+        telemetry.addData("angle: ", angle);
+        telemetry.addData("radius: ", r);
+        telemetry.addData("rotate: ", rot);
+
+
+        double vlf = r * Math.cos(angle) + rot;
+        double vrf = r * Math.sin(angle) - rot;
+        double vlb = r * Math.sin(angle) + rot;
+        double vrb = r * Math.cos(angle) - rot;
+
+        double maxPower = maxPow(vlf, vrf, vlb, vrb);
+
+        vlf /= maxPower;
+        vrf /= maxPower;
+        vlb /= maxPower;
+        vrb /= maxPower;
+
+        fL.setPower(0.5*Math.pow(POW,2) * Range.clip(vlf, -1, 1));
+        fR.setPower(-0.5*Math.pow(POW,2) * Range.clip(vrf, -1, 1));
+        bL.setPower(0.5*Math.pow(POW,2) * Range.clip(vlb, -1, 1));
+        bR.setPower(-0.5*Math.pow(POW,2) * Range.clip(vrb, -1, 1));
+
+
+        telemetry.addData("maxPower: ", maxPower);
     }
 
-
+    private double maxPow(double x, double y, double z, double w) {
+        x = Math.abs(x);
+        y = Math.abs(y);
+        z = Math.abs(z);
+        w = Math.abs(w);
+        return Math.max(Math.max(x,y), Math.max(z,w));
+    }
 }
