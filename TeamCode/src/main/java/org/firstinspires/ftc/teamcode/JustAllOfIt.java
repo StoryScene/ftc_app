@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+/**package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -9,9 +9,9 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.modules.GamepadV2;
 
-/**
+
  * Created by Kit Caldwell on 12/8/2017.
- */
+
 
 @TeleOp
 public class JustAllOfIt extends OpMode{
@@ -76,7 +76,7 @@ public class JustAllOfIt extends OpMode{
         if (gamepad2.b){
             r2.setPower(.5);
         }
-        else if (gamepad2.y){
+        else if (gamepad2.y){-
             r2.setPower(-.5);
         }
         else{
@@ -172,3 +172,4 @@ public class JustAllOfIt extends OpMode{
     }
 
 }
+ */
