@@ -17,8 +17,8 @@ import org.firstinspires.ftc.teamcode.modules.GamepadV2;
 @TeleOp
 public class SquareBotTeleOp extends OpMode {
 
-    CRServo arm;
-    ColorSensor color;
+    //CRServo arm;
+    //ColorSensor color;
     DcMotor lf, rf, lb, rb;
 
     GamepadV2 pad1 = new GamepadV2();
@@ -35,16 +35,17 @@ public class SquareBotTeleOp extends OpMode {
         lb.setPower(0);
         rb.setPower(0);
 
-
+/*
         arm = hardwareMap.crservo.get("arm");
         color = hardwareMap.colorSensor.get("color");
-
+*/
     }
 
     @Override
     public void loop() {
 
         mechanumLoop();
+        /*
         if (pad1.left_bumper){
             arm.setPower(POWER);
         }
@@ -55,7 +56,7 @@ public class SquareBotTeleOp extends OpMode {
             arm.setPower(0);
         }
         telemetry.addData("Arm power: ", arm.getPower());
-
+        */
     }
 
     private void mechanumInit() {

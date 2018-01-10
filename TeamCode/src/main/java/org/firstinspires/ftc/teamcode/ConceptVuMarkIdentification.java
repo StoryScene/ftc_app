@@ -151,6 +151,12 @@ public class ConceptVuMarkIdentification extends LinearOpMode {
                  * we illustrate it nevertheless, for completeness. */
                 OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)relicTemplate.getListener()).getPose();
                 telemetry.addData("Pose", format(pose));
+                float[] test = pose.getData();
+                int l = test.length;
+                telemetry.addData("len: ", l);
+                for (int i = 0; i < l; i++) {
+                    telemetry.addData("Coord " + (i+1), test[i]);
+                }
 
                 /* We further illustrate how to decompose the pose into useful rotational and
                  * translational components */
