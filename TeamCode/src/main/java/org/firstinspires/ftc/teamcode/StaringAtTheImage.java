@@ -33,15 +33,12 @@ public class StaringAtTheImage extends LinearOpMode {
 
 
     // Largely copied from Auto Red
-    // Wait no it won't because um idk how to put down glyphs
+    // Wait no it won't because um idk how to \put down glyphs
 
     DcMotor fL;
     DcMotor bL;
     DcMotor fR;
     DcMotor bR;
-    CRServo arm;
-    ColorSensor color;
-
 
     final double[] targetCoords = {0.1,0,-400};
 
@@ -55,8 +52,6 @@ public class StaringAtTheImage extends LinearOpMode {
     private double distance = 4000;
 
 
-
-
     @Override
     public void runOpMode() throws InterruptedException {
 
@@ -64,19 +59,6 @@ public class StaringAtTheImage extends LinearOpMode {
         bL = hardwareMap.dcMotor.get("leftB");
         fR = hardwareMap.dcMotor.get("rightF");
         bR = hardwareMap.dcMotor.get("rightB");
-
-        arm = hardwareMap.crservo.get("arm");
-        color = hardwareMap.colorSensor.get("color");
-
-        fL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        bL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        bR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        fL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        bL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        fR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        bR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         VuforiaTrackable relicImage = setUpVuforia();
 
@@ -142,70 +124,6 @@ public class StaringAtTheImage extends LinearOpMode {
             else if (vu == vu.LEFT){
                 distance = 5000;
             }
-
-            fL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            fR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            bL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            bR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-
-            arm.setPower(0.5);
-            setPowers(0,0,0);
-            telemetry.addData("Current arm power: ", arm.getPower());
-
-
-            if (color.blue()/2 > color.red()) {
-                arm.setPower(0);
-                setPowers(0,-0.8,0);
-                sleep(400);
-                setPowers(0,0,0);
-
-                arm.setPower(-0.5);
-                sleep(2000);
-                arm.setPower(0);
-                sleep(1000);
-
-                setPowers(0,0,0.8);
-                sleep(200);
-                setPowers(0,0.8,0);
-                sleep(4000);
-                setPowers(0,0,0);
-                sleep(1000);
-                setPowers(0,-0.8,0);
-                sleep(1000);
-                setPowers(0,0,0);
-                sleep(30000);
-            }
-
-            if (color.blue() < color.red()/2) {
-                arm.setPower(0);
-                setPowers(0,0.8,0);
-                sleep(400);
-                setPowers(0,0,0);
-
-                arm.setPower(-0.5);
-                sleep(2000);
-                arm.setPower(0);
-                sleep(1000);
-
-                setPowers(0,0,0.8);
-                sleep(200);
-                setPowers(0,0.8,0);
-                sleep(3000);
-                setPowers(0,0,0);
-                sleep(1000);
-                setPowers(0,-0.8,0);
-                sleep(1000);
-                setPowers(0,0,0);
-                sleep(30000);
-            }
-
-            else{
-                arm.setPower(0);
-                setPowers(0,0,0);
-            }
-
-
             telemetry.addData("Dis: ", distance);
             telemetry.addData("Actual powers: ", fL.getPower()+ " " +  fR.getPower() + " " + bL.getPower() + " " + bR.getPower());
             telemetry.update();
