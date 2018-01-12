@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.modules.GamepadV2;
  * Created by Emma on 1/12/18.
  */
 
-@TeleOp
-public class FiveNewMotors extends OpMode {
+@TeleOp(name = "Encoders Test")
+public class FiveMotorsForEncoders extends OpMode {
 
     DcMotor lWheel, rWheel;
     DcMotor transparent;
