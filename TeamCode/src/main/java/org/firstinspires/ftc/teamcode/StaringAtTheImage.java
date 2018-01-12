@@ -45,14 +45,16 @@ public class StaringAtTheImage extends LinearOpMode {
 
     final double[] targetCoords = {0.1,0,-400};
 
-    final double maxPower = 0.6;
+    final double maxPower = 0.8;
+
+    final int HITBALL = 3000;
 
 
     public static final String TAG = "Vuforia VuMark Sample";
     OpenGLMatrix lastLocation = null;
 
 
-    private double distance = 4000;
+    private int distance = 4000;
 
 
 
@@ -82,24 +84,28 @@ public class StaringAtTheImage extends LinearOpMode {
 
         waitForStart();
         boolean prepared = false;
+        //State 0 or 1 means not prepared (goes to readjust), but 0 goes to move ball and 1 goes to driving
+        //State 2 is move ball and state 3 is driving
+        int state = 0;
         setPowers(0,0,0);
+        double xx=0, yy=0, rot=0;
 
         while (opModeIsActive()) {
+            if (state == 0 || state == 1){
+                ArrayList vuMarkAndPos = lookForRelicImage(relicImage);
+                RelicRecoveryVuMark vu = (RelicRecoveryVuMark) vuMarkAndPos.get(0);
+                float[] pos = (float[]) vuMarkAndPos.get(1);
 
-            ArrayList vuMarkAndPos = lookForRelicImage(relicImage);
-            RelicRecoveryVuMark vu = (RelicRecoveryVuMark) vuMarkAndPos.get(0);
-            float[] pos = (float[]) vuMarkAndPos.get(1);
+                // While only pos[2], pos[12] and pos[14] are useful.
+                // 2 is the angle  (looking to the left is positive)
+                // 12 is the distance (left/right)  (left is negative)
+                // 14 is the distance (front/back)  (away from photo is negative)
 
-            // While only pos[2], pos[12] and pos[14] are useful.
-            // 2 is the angle  (looking to the left is positive)
-            // 12 is the distance (left/right)  (left is negative)
-            // 14 is the distance (front/back)  (away from photo is negative)
+                float[] usefulCoords = {pos[2], pos[12], pos[14]};
 
-            float[] usefulCoords = {pos[2], pos[12], pos[14]};
 
-            double xx=0, yy=0, rot=0;
-            // K I'm not sure about any of these but thinking about them is difficult hh
-            if (!prepared){
+                // K I'm not sure about any of these but thinking about them is difficult hh
+
                 if (vu == vu.UNKNOWN){
                     setPowers(0,0,0);
                 }
@@ -114,101 +120,107 @@ public class StaringAtTheImage extends LinearOpMode {
                     xx = 0;
                     rot = 0;
                 }
-                else if (Math.abs(usefulCoords[2] - targetCoords[2]) > 10){
+                else if (Math.abs(usefulCoords[2] - (targetCoords[2]+200*state)) > 10){
                     xx = maxPower*Math.signum(Math.abs(usefulCoords[2] - targetCoords[2]));
                     yy = 0;
                     rot = 0;
                 }
                 else {
                     if (usefulCoords[0] != targetCoords[0] || usefulCoords[1] != targetCoords[1] || usefulCoords[2] != targetCoords[2]){
-                        prepared = true;
+                        state += 2;
                     }
                     xx = 0;
                     yy = 0;
                     rot = 0;
                 }
+                setPowers(xx,yy,rot);
+
+                telemetry.addData("Powers: ", xx + " " + yy + " " + rot);
+
+                if (vu == vu.RIGHT){
+                    distance = 4000;
+                }
+                else if (vu == vu.CENTER){
+                    distance = 4500;
+                }
+                else if (vu == vu.LEFT){
+                    distance = 5000;
+                }
             }
 
-            setPowers(xx,yy,rot);
+            else if (state == 2) {
 
-            telemetry.addData("Powers: ", xx + " " + yy + " " + rot);
-
-            if (vu == vu.RIGHT){
-                distance = 4000;
-            }
-            else if (vu == vu.CENTER){
-                distance = 4500;
-            }
-            else if (vu == vu.LEFT){
-                distance = 5000;
-            }
-
-            fL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            fR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            bL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            bR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                fL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                fR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                bL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                bR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
-            arm.setPower(0.5);
-            setPowers(0,0,0);
-            telemetry.addData("Current arm power: ", arm.getPower());
-
-
-            if (color.blue()/2 > color.red()) {
-                arm.setPower(0);
-                setPowers(0,-0.8,0);
-                sleep(400);
+                arm.setPower(0.5);
                 setPowers(0,0,0);
+                telemetry.addData("Current arm power: ", arm.getPower());
 
-                arm.setPower(-0.5);
-                sleep(2000);
-                arm.setPower(0);
-                sleep(1000);
 
-                setPowers(0,0,0.8);
-                sleep(200);
-                setPowers(0,0.8,0);
-                sleep(4000);
+                if (color.blue()/2 > color.red()) {
+                    arm.setPower(0);
+                    setAllPowersAndDistance(HITBALL, 0, -0.8,0);
+                    sleep(HITBALL/2);
+                    setPowers(0,0,0);
+
+                    arm.setPower(-0.5);
+                    sleep(2000);
+                    arm.setPower(0);
+                    sleep(1000);
+
+
+                    setAllPowersAndDistance(HITBALL, 0, 0.8,0);
+                    sleep(HITBALL/2);
+
+                    state = 1;
+
+                }
+
+                if (color.blue() < color.red()/2) {
+                    arm.setPower(0);
+                    setAllPowersAndDistance(HITBALL, 0, 0.8,0);
+                    sleep(HITBALL/2);
+                    setPowers(0,0,0);
+
+                    arm.setPower(-0.5);
+                    sleep(2000);
+                    arm.setPower(0);
+                    sleep(1000);
+
+
+                    setAllPowersAndDistance(HITBALL, 0, -0.8,0);
+                    sleep(HITBALL/2);
+
+                    state = 1;
+
+                }
+
+                else{
+                    arm.setPower(0);
+                    setPowers(0,0,0);
+                }
+
+
+                telemetry.addData("Dis: ", distance);
+                telemetry.addData("Actual powers: ", fL.getPower()+ " " +  fR.getPower() + " " + bL.getPower() + " " + bR.getPower());
+                telemetry.update();
+            }
+            else {
+                setAllPowersAndDistance(distance, 0, 0.8, 0);
+                sleep(distance);
+                /*
                 setPowers(0,0,0);
                 sleep(1000);
                 setPowers(0,-0.8,0);
                 sleep(1000);
                 setPowers(0,0,0);
                 sleep(30000);
+                */
             }
-
-            if (color.blue() < color.red()/2) {
-                arm.setPower(0);
-                setPowers(0,0.8,0);
-                sleep(400);
-                setPowers(0,0,0);
-
-                arm.setPower(-0.5);
-                sleep(2000);
-                arm.setPower(0);
-                sleep(1000);
-
-                setPowers(0,0,0.8);
-                sleep(200);
-                setPowers(0,0.8,0);
-                sleep(3000);
-                setPowers(0,0,0);
-                sleep(1000);
-                setPowers(0,-0.8,0);
-                sleep(1000);
-                setPowers(0,0,0);
-                sleep(30000);
-            }
-
-            else{
-                arm.setPower(0);
-                setPowers(0,0,0);
-            }
-
-
-            telemetry.addData("Dis: ", distance);
-            telemetry.addData("Actual powers: ", fL.getPower()+ " " +  fR.getPower() + " " + bL.getPower() + " " + bR.getPower());
-            telemetry.update();
 
         }
     }
@@ -374,6 +386,83 @@ public class StaringAtTheImage extends LinearOpMode {
 
 
         telemetry.addData("maxPower: ", maxPower);
+    }
+
+    private void setAllPowersAndDistance(int distance, double xx, double yy, double rotation){
+        int[] signs = computeSigns(xx, yy, rotation);
+        fL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        fR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        bL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        bR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        fL.setTargetPosition(signs[0]*distance);
+        fR.setTargetPosition(signs[1]*distance);
+        bL.setTargetPosition(signs[2]*distance);
+        bR.setTargetPosition(signs[3]*distance);
+
+        fL.setPower(signs[0]*maxPower);
+        fR.setPower(signs[1]*maxPower);
+        bL.setPower(signs[2]*maxPower);
+        bR.setPower(signs[3]*maxPower);
+    }
+
+    private int[] computeSigns(double xx, double yy, double rotation){
+        double x = Range.clip(xx, -1, 1);
+        double y = - Range.clip(yy, -1, 1);
+
+        if (Math.abs(x) < 0.1) {
+            x = 0;
+        }
+        if (Math.abs(y) < 0.1) {
+            y = 0;
+        }
+
+        double rot = Range.clip(rotation, -1, 1);
+
+        double r = Math.hypot(x, y);
+        double angle = 0.0;
+
+        double POW = Math.max(Math.hypot(x, y), Math.abs(rot));
+
+
+        if (r > 0.1){
+            angle = Math.atan2(y,x) - Math.PI / 4;
+        }
+
+        telemetry.addData("angle: ", angle);
+        telemetry.addData("radius: ", r);
+        telemetry.addData("rotate: ", rot);
+
+
+        double vlf = r * Math.cos(angle) + rot;
+        double vrf = r * Math.sin(angle) - rot;
+        double vlb = r * Math.sin(angle) + rot;
+        double vrb = r * Math.cos(angle) - rot;
+
+        double maxPower = maxPow(vlf, vrf, vlb, vrb);
+
+        vlf /= maxPower;
+        vrf /= maxPower;
+        vlb /= maxPower;
+        vrb /= maxPower;
+
+        int[] result = new int[4];
+        result[0] = getSign(vlf);
+        result[1] = getSign(vrf);
+        result[2] = getSign(vlb);
+        result[3] = getSign(vrb);
+
+        return result;
+    }
+
+    private int getSign(double x) {
+        if (x > 0.001) {
+            return 1;
+        }
+        if (x < -0.001) {
+            return -1;
+        }
+        return 0;
     }
 
     private double maxPow(double x, double y, double z, double w) {
