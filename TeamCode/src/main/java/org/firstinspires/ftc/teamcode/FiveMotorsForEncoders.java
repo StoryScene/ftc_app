@@ -32,7 +32,7 @@ public class FiveMotorsForEncoders extends OpMode {
         grabLeft = hardwareMap.dcMotor.get("grab1");
         grabRight = hardwareMap.dcMotor.get("grab2");
 
-        transparent = hardwareMap.dcMotor.get("transparent");
+        //transparent = hardwareMap.dcMotor.get("transparent");
 
         /*
         arm = hardwareMap.crservo.get("arm");
@@ -75,6 +75,7 @@ public class FiveMotorsForEncoders extends OpMode {
             grabRight.setPower(0);
         }
 
+        /*
         if (gamepad1.left_bumper){
             transparent.setPower(.5);
         }
@@ -84,6 +85,7 @@ public class FiveMotorsForEncoders extends OpMode {
         else {
             transparent.setPower(0);
         }
+        */
 
         telemetry.update();
 
