@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.modules.GamepadV2;
 public class FiveMotorsForEncoders extends OpMode {
 
     DcMotor lWheel, rWheel;
-    DcMotor transparent;
+    CRServo transparent;
     DcMotor grabLeft, grabRight;
     CRServo arm;
     ColorSensor color;
@@ -32,7 +32,7 @@ public class FiveMotorsForEncoders extends OpMode {
         grabLeft = hardwareMap.dcMotor.get("grab1");
         grabRight = hardwareMap.dcMotor.get("grab2");
 
-        transparent = hardwareMap.dcMotor.get("transparent");
+        transparent = hardwareMap.crservo.get("transparent");
 
         /*
         arm = hardwareMap.crservo.get("arm");

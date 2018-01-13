@@ -37,7 +37,7 @@ public class TwoWheelsAuto extends LinearOpMode {
 
     DcMotor lWheel;
     DcMotor rWheel;
-    DcMotor transparent;
+    CRServo transparent;
     CRServo arm;
     ColorSensor color;
 
@@ -63,7 +63,7 @@ public class TwoWheelsAuto extends LinearOpMode {
         lWheel = hardwareMap.dcMotor.get("leftWheel");
         rWheel = hardwareMap.dcMotor.get("rightWheel");
 
-        transparent = hardwareMap.dcMotor.get("transparent");
+        transparent = hardwareMap.crservo.get("transparent");
 
         arm = hardwareMap.crservo.get("arm");
         color = hardwareMap.colorSensor.get("color");
