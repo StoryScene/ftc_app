@@ -28,7 +28,7 @@ import java.util.ArrayList;
  * Created by Emma on 01/12/18.
  */
 
-@Autonomous(name = "Auto Without Encoders")
+@Autonomous(name = "Red Without Encoders")
 public class AutoWithoutEncoders extends LinearOpMode {
 
 
