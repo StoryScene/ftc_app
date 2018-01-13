@@ -192,7 +192,7 @@ public class TwoWheelsAuto extends LinearOpMode {
                 sleep(1000);
 
                 setAllPowersAndDistance(LAST_PUSH, 0.8, 0);
-                sleep(LAST_PUSH/2);
+                sleep(20000);
             }
 
         }
