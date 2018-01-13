@@ -93,14 +93,14 @@ public class FiveMotorsForEncoders extends OpMode {
 
 
     public void setPowers(double yy, double rotation) {
-        double y = Range.clip(yy, -1, 1);
+        double y = - Range.clip(yy, -1, 1);
 
         if (rotation == 0) {
-            lWheel.setPower(y);
+            lWheel.setPower(-y);
             rWheel.setPower(y);
         } else {
             lWheel.setPower(rotation);
-            rWheel.setPower(-rotation);
+            rWheel.setPower(rotation);
         }
 
         telemetry.addData("Actual powers: ", lWheel.getPower()+ " " +  rWheel.getPower());
