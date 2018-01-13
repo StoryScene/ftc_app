@@ -29,7 +29,7 @@ import java.util.ArrayList;
  */
 
 @Autonomous(name = "Auto Without Encoders")
-public class AutoWithoutEncoders extends LinearOpMode {
+public class BlueWithoutEncoders extends LinearOpMode {
 
 
     // Largely copied from Auto Red
@@ -137,7 +137,7 @@ public class AutoWithoutEncoders extends LinearOpMode {
 
                 if (color.blue()/2 > color.red()) {
                     arm.setPower(0);
-                    setPowers(-0.8,0);
+                    setPowers(0.8,0);
                     sleep(HITBALL);
                     setPowers(0,0);
 
@@ -156,7 +156,7 @@ public class AutoWithoutEncoders extends LinearOpMode {
 
                 if (color.blue() < color.red()/2) {
                     arm.setPower(0);
-                    setPowers(0.8,0);
+                    setPowers(-0.8,0);
                     sleep(HITBALL);
                     setPowers(0,0);
 
@@ -188,7 +188,7 @@ public class AutoWithoutEncoders extends LinearOpMode {
                 setPowers(0.8, 0);
                 sleep(distance + closer * DIFF);
 
-                setPowers( 0, -0.8);
+                setPowers( 0, 0.8);
                 sleep(ROTATE_NINETY);
 
                 setPowers( -0.8, 0);
