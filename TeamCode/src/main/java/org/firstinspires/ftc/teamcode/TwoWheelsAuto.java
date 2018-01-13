@@ -313,14 +313,14 @@ public class TwoWheelsAuto extends LinearOpMode {
 
 
     public void setPowers(double yy, double rotation) {
-        double y = Range.clip(yy, -1, 1);
+        double y = - Range.clip(yy, -1, 1);
 
         if (rotation == 0) {
             lWheel.setPower(y);
-            rWheel.setPower(y);
+            rWheel.setPower(-y);
         } else {
             lWheel.setPower(rotation);
-            rWheel.setPower(-rotation);
+            rWheel.setPower(rotation);
         }
 
         telemetry.addData("Actual powers: ", lWheel.getPower()+ " " +  rWheel.getPower());
@@ -342,15 +342,15 @@ public class TwoWheelsAuto extends LinearOpMode {
     }
 
     private int[] computeSigns(double yy, double rotation){
-        double y = Range.clip(yy, -1, 1);
+        double y = - Range.clip(yy, -1, 1);
 
         int[] result = new int[2];
         if (rotation == 0) {
             result[0] = getSign(y);
-            result[1] = getSign(y);
+            result[1] = getSign(-y);
         } else {
             result[0] = getSign(rotation);
-            result[1] = - getSign(rotation);
+            result[1] = getSign(rotation);
         }
 
         return result;

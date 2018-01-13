@@ -34,10 +34,10 @@ public class FiveMotorsForEncoders extends OpMode {
 
         //transparent = hardwareMap.dcMotor.get("transparent");
 
-        /*
+
         arm = hardwareMap.crservo.get("arm");
         color = hardwareMap.colorSensor.get("color");
-        */
+
         lWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -75,17 +75,18 @@ public class FiveMotorsForEncoders extends OpMode {
             grabRight.setPower(0);
         }
 
-        /*
+
+
         if (gamepad1.left_bumper){
-            transparent.setPower(.5);
+            arm.setPower(.5);
         }
         if (gamepad1.right_bumper){
-            transparent.setPower(-.5);
+            arm.setPower(-.5);
         }
         else {
-            transparent.setPower(0);
+            arm.setPower(0);
         }
-        */
+
 
         telemetry.update();
 
@@ -96,8 +97,8 @@ public class FiveMotorsForEncoders extends OpMode {
         double y = - Range.clip(yy, -1, 1);
 
         if (rotation == 0) {
-            lWheel.setPower(-y);
-            rWheel.setPower(y);
+            lWheel.setPower(y);
+            rWheel.setPower(-y);
         } else {
             lWheel.setPower(rotation);
             rWheel.setPower(rotation);
