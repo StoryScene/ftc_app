@@ -28,8 +28,8 @@ import java.util.ArrayList;
  * Created by Emma on 01/12/18.
  */
 
-@Autonomous
-public class TwoWheelsAuto extends LinearOpMode {
+@Autonomous(name = "Auto Without Encoders")
+public class AutoWithoutEncoders extends LinearOpMode {
 
 
     // Largely copied from Auto Red
@@ -45,14 +45,14 @@ public class TwoWheelsAuto extends LinearOpMode {
 
     final double maxPower = 0.8;
 
-    final int HITBALL = 1000, ROTATE_NINETY = 1870, LAST_PUSH = 1000;
+    final int HITBALL = 200, ROTATE_NINETY = 500, LAST_PUSH = 500;
 
 
     public static final String TAG = "Vuforia VuMark Sample";
     OpenGLMatrix lastLocation = null;
 
 
-    private int distance = 4000;
+    private int distance = 3000;
 
 
 
@@ -67,12 +67,6 @@ public class TwoWheelsAuto extends LinearOpMode {
 
         arm = hardwareMap.crservo.get("arm");
         color = hardwareMap.colorSensor.get("color");
-
-        lWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        lWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         VuforiaTrackable relicImage = setUpVuforia();
 
@@ -108,11 +102,11 @@ public class TwoWheelsAuto extends LinearOpMode {
                     // K I'm not sure about any of these but thinking about them is difficult hh
                     state += 2;
                     if (vu == vu.RIGHT) {
-                        distance = 10000;
+                        distance = 3000;
                     } else if (vu == vu.CENTER) {
-                        distance = 12000;
+                        distance = 4000;
                     } else if (vu == vu.LEFT) {
-                        distance = 14000;
+                        distance = 5000;
                     } else {
                         state -= 2;
                     }
@@ -121,17 +115,14 @@ public class TwoWheelsAuto extends LinearOpMode {
 
             else if (state == 2) {
 
-                lWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                rWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
                 arm.setPower(0.5);
                 setPowers(0,0);
                 telemetry.addData("Current arm power: ", arm.getPower());
 
                 if (color.blue()/2 > color.red()) {
                     arm.setPower(0);
-                    setAllPowersAndDistance(HITBALL, -0.8,0);
-                    sleep(HITBALL/2);
+                    setPowers(-0.8,0);
+                    sleep(HITBALL);
                     setPowers(0,0);
 
                     arm.setPower(-0.5);
@@ -140,8 +131,8 @@ public class TwoWheelsAuto extends LinearOpMode {
                     sleep(1000);
 
 
-                    setAllPowersAndDistance(HITBALL, 0.8,0);
-                    sleep(HITBALL/2);
+                    setPowers(0.8,0);
+                    sleep(HITBALL);
 
                     state = 1;
 
@@ -149,8 +140,8 @@ public class TwoWheelsAuto extends LinearOpMode {
 
                 if (color.blue() < color.red()/2) {
                     arm.setPower(0);
-                    setAllPowersAndDistance(HITBALL,  0.8,0);
-                    sleep(HITBALL/2);
+                    setPowers(0.8,0);
+                    sleep(HITBALL);
                     setPowers(0,0);
 
                     arm.setPower(-0.5);
@@ -159,8 +150,8 @@ public class TwoWheelsAuto extends LinearOpMode {
                     sleep(1000);
 
 
-                    setAllPowersAndDistance(HITBALL, -0.8,0);
-                    sleep(HITBALL/2);
+                    setPowers(-0.8,0);
+                    sleep(HITBALL);
 
                     state = 1;
 
@@ -177,21 +168,23 @@ public class TwoWheelsAuto extends LinearOpMode {
                 telemetry.update();
             }
             else {
-                setAllPowersAndDistance(distance, 0.8, 0);
-                sleep(distance/2);
+                setPowers(0.8, 0);
+                sleep(distance);
 
-                setAllPowersAndDistance(ROTATE_NINETY, 0, -0.8);
-                sleep(ROTATE_NINETY/2);
+                setPowers( 0, -0.8);
+                sleep(ROTATE_NINETY);
 
-                setAllPowersAndDistance(LAST_PUSH, -0.8, 0);
-                sleep(LAST_PUSH/2);
+                setPowers( -0.8, 0);
+                sleep(LAST_PUSH);
 
                 //transparent.setPower(0.8);
                 //sleep(1000);
                 //transparent.setPower(-0.8);
                 //sleep(1000);
 
-                setAllPowersAndDistance(LAST_PUSH, 0.8, 0);
+                setPowers( 0.8, 0);
+                sleep(LAST_PUSH);
+                setPowers(0,0);
                 sleep(20000);
             }
 
@@ -326,11 +319,8 @@ public class TwoWheelsAuto extends LinearOpMode {
         telemetry.addData("Actual powers: ", lWheel.getPower()+ " " +  rWheel.getPower());
     }
 
-
+    /*
     private void setAllPowersAndDistance(int distance, double yy, double rotation){
-        lWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
         int[] signs = computeSigns(yy, rotation);
 
         lWheel.setTargetPosition(signs[0]*distance);
@@ -340,6 +330,7 @@ public class TwoWheelsAuto extends LinearOpMode {
         rWheel.setPower(signs[1]*maxPower);
 
     }
+    */
 
     private int[] computeSigns(double yy, double rotation){
         double y = - Range.clip(yy, -1, 1);
