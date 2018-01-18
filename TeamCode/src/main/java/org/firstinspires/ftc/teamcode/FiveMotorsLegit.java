@@ -48,14 +48,17 @@ public class FiveMotorsLegit extends OpMode {
         else if (gamepad1.right_trigger > 0 && gamepad1.left_trigger > 0){
             lift.setPower(-.5);
         }
+        else{
+            lift.setPower(0);
+        }
 
         if (gamepad2.right_bumper){
             intake1.setPower(.5);
             intake2.setPower(.5);
         }
         else if (gamepad2.left_bumper) {
-            intake1.setPower(-.5);
-            intake2.setPower(-.5);
+            intake1.setPower(-.25);
+            intake2.setPower(-.25);
         }
         else {
             intake1.setPower(0);
@@ -81,7 +84,7 @@ public class FiveMotorsLegit extends OpMode {
             aServo.setPower(0);
         }
 
-        lift.setPower(gamepad2.right_stick_y);
+
 
         telemetry.addData("left stick 1", gamepad1.left_stick_y);
         telemetry.addData("right stick 1", gamepad1.right_stick_y);

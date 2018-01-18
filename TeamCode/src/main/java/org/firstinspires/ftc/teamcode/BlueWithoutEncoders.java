@@ -55,7 +55,7 @@ public class BlueWithoutEncoders extends LinearOpMode {
     OpenGLMatrix lastLocation = null;
 
 
-    private int distance = 3000;
+    private int distance = 1000;
 
 
 
@@ -63,12 +63,12 @@ public class BlueWithoutEncoders extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        lWheel = hardwareMap.dcMotor.get("leftWheel");
-        rWheel = hardwareMap.dcMotor.get("rightWheel");
+        lWheel = hardwareMap.dcMotor.get("left");
+        rWheel = hardwareMap.dcMotor.get("right");
 
         // transparent = hardwareMap.dcMotor.get("transparent");
 
-        arm = hardwareMap.crservo.get("arm");
+        arm = hardwareMap.crservo.get("servo");
         color = hardwareMap.colorSensor.get("color");
 
         VuforiaTrackable relicImage = setUpVuforia();
@@ -118,7 +118,7 @@ public class BlueWithoutEncoders extends LinearOpMode {
                 */
 
                 state += 2;
-                if (vu == vu.RIGHT) {
+                /*if (vu == vu.RIGHT) {
                     distance = 3000;
                 } else if (vu == vu.CENTER) {
                     distance = 4000;
@@ -126,7 +126,7 @@ public class BlueWithoutEncoders extends LinearOpMode {
                     distance = 5000;
                 } else {
                     state -= 2;
-                }
+                } */
             }
 
             else if (state == 2) {
@@ -185,6 +185,7 @@ public class BlueWithoutEncoders extends LinearOpMode {
                 telemetry.update();
             }
             else {
+                /*
                 setPowers(0.8, 0);
                 sleep(distance + closer * DIFF);
 
@@ -201,8 +202,9 @@ public class BlueWithoutEncoders extends LinearOpMode {
 
                 setPowers( 0.8, 0);
                 sleep(LAST_PUSH);
+                */
                 setPowers(0,0);
-                sleep(20000);
+                sleep(30000);
             }
 
         }
