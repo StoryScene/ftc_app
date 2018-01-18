@@ -118,6 +118,7 @@ public class AutoWithoutEncoders extends LinearOpMode {
                 */
 
                 state += 2;
+
                 if (vu == vu.RIGHT) {
                     distance = 3000;
                 } else if (vu == vu.CENTER) {
