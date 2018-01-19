@@ -55,7 +55,7 @@ public class AutoWithoutEncoders extends LinearOpMode {
     OpenGLMatrix lastLocation = null;
 
 
-    private int distance = 1000;
+    private int distance = 3000;
 
 
 
@@ -63,12 +63,12 @@ public class AutoWithoutEncoders extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        lWheel = hardwareMap.dcMotor.get("left");
-        rWheel = hardwareMap.dcMotor.get("right");
+        lWheel = hardwareMap.dcMotor.get("leftWheel");
+        rWheel = hardwareMap.dcMotor.get("rightWheel");
 
         // transparent = hardwareMap.dcMotor.get("transparent");
 
-        arm = hardwareMap.crservo.get("servo");
+        arm = hardwareMap.crservo.get("arm");
         color = hardwareMap.colorSensor.get("color");
 
         VuforiaTrackable relicImage = setUpVuforia();
@@ -118,7 +118,8 @@ public class AutoWithoutEncoders extends LinearOpMode {
                 */
 
                 state += 2;
-                /*if (vu == vu.RIGHT) {
+
+                if (vu == vu.RIGHT) {
                     distance = 3000;
                 } else if (vu == vu.CENTER) {
                     distance = 4000;
@@ -126,7 +127,7 @@ public class AutoWithoutEncoders extends LinearOpMode {
                     distance = 5000;
                 } else {
                     state -= 2;
-                }*/
+                }
             }
 
             else if (state == 2) {
@@ -185,10 +186,8 @@ public class AutoWithoutEncoders extends LinearOpMode {
                 telemetry.update();
             }
             else {
-                /*
-                setPowers(-0.8, 0);
+                setPowers(0.8, 0);
                 sleep(distance + closer * DIFF);
-
 
                 setPowers( 0, -0.8);
                 sleep(ROTATE_NINETY);
@@ -203,9 +202,8 @@ public class AutoWithoutEncoders extends LinearOpMode {
 
                 setPowers( 0.8, 0);
                 sleep(LAST_PUSH);
-                */
                 setPowers(0,0);
-                sleep(30000);
+                sleep(20000);
             }
 
         }
