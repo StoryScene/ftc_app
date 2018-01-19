@@ -26,7 +26,7 @@ public class VeryTemporaryQuestionMark extends OpMode {
         intake1 = hardwareMap.dcMotor.get("in1");
         intake2 = hardwareMap.dcMotor.get("in2");
         hold1 = hardwareMap.dcMotor.get("hold1");
-        hold2 = hardwareMap.dcMotor.get("hold1");
+        hold2 = hardwareMap.dcMotor.get("hold2");
 
         //leftDrive.setDirection(DcMotorSimple.Direction.REVERSE);
         intake2.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -56,12 +56,12 @@ public class VeryTemporaryQuestionMark extends OpMode {
         }
 
         if (gamepad1.dpad_up) {
-            hold1.setPower(0.8);
-            hold2.setPower(0.8);
+            hold1.setPower(0.3);
+            hold2.setPower(0.3);
         }
         else if (gamepad1.dpad_down) {
-            hold1.setPower(-0.8);
-            hold2.setPower(-0.8);
+            hold1.setPower(-0.3);
+            hold2.setPower(-0.3);
         }
         else {
             hold1.setPower(0);
