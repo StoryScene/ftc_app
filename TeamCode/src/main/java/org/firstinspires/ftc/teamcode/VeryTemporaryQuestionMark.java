@@ -16,27 +16,31 @@ public class VeryTemporaryQuestionMark extends OpMode {
     DcMotor rightDrive;
     DcMotor intake1;
     DcMotor intake2;
-    DcMotor lift;
+    DcMotor hold1, hold2;
 
     @Override
     public void init() {
 
-        leftDrive = hardwareMap.dcMotor.get("left");
-        rightDrive = hardwareMap.dcMotor.get("right");
+        //leftDrive = hardwareMap.dcMotor.get("left");
+        //rightDrive = hardwareMap.dcMotor.get("right");
         intake1 = hardwareMap.dcMotor.get("in1");
         intake2 = hardwareMap.dcMotor.get("in2");
-        lift = hardwareMap.dcMotor.get("lift");
+        hold1 = hardwareMap.dcMotor.get("hold1");
+        hold2 = hardwareMap.dcMotor.get("hold1");
 
-        leftDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        //leftDrive.setDirection(DcMotorSimple.Direction.REVERSE);
         intake2.setDirection(DcMotorSimple.Direction.REVERSE);
+        hold2.setDirection(DcMotorSimple.Direction.REVERSE);
 
     }
 
     @Override
     public void loop() {
 
+        /*
         leftDrive.setPower(gamepad1.left_stick_y);
         rightDrive.setPower(gamepad1.right_stick_y);
+        */
 
         if (gamepad1.a){
             intake1.setPower(.5);
@@ -52,13 +56,16 @@ public class VeryTemporaryQuestionMark extends OpMode {
         }
 
         if (gamepad1.dpad_up) {
-            lift.setPower(0.8);
+            hold1.setPower(0.8);
+            hold2.setPower(0.8);
         }
         else if (gamepad1.dpad_down) {
-            lift.setPower(-0.8);
+            hold1.setPower(-0.8);
+            hold2.setPower(-0.8);
         }
         else {
-            lift.setPower(0);
+            hold1.setPower(0);
+            hold2.setPower(0);
         }
 
         telemetry.addData("left stick 1", gamepad1.left_stick_y);
@@ -66,5 +73,9 @@ public class VeryTemporaryQuestionMark extends OpMode {
         telemetry.addData("right bumper",gamepad2.right_bumper);
         telemetry.addData("left bumper",gamepad2.left_bumper);
         telemetry.addData("right stick 2",gamepad2.right_stick_y);
+
+        telemetry.addData("hold1: ", hold1.getPower());
+        telemetry.addData("intake1: ", intake1.getPower());
+        telemetry.update();
     }
 }
