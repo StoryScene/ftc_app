@@ -37,13 +37,13 @@ public class AutoWithoutEncoders extends LinearOpMode {
 
     DcMotor lWheel;
     DcMotor rWheel;
-    DcMotor transparent;
+    DcMotor slide;
     CRServo arm;
     ColorSensor color;
 
     final double[] targetCoords = {0.1,0,-400};
 
-    final double maxPower = 0.8;
+    final double maxPower = 0.4;
 
     final int HITBALL = 200, ROTATE_NINETY = 500, LAST_PUSH = 500;
 
@@ -66,7 +66,7 @@ public class AutoWithoutEncoders extends LinearOpMode {
         lWheel = hardwareMap.dcMotor.get("leftWheel");
         rWheel = hardwareMap.dcMotor.get("rightWheel");
 
-        // transparent = hardwareMap.dcMotor.get("transparent");
+        slide = hardwareMap.dcMotor.get("slide");
 
         arm = hardwareMap.crservo.get("arm");
         color = hardwareMap.colorSensor.get("color");
@@ -103,6 +103,7 @@ public class AutoWithoutEncoders extends LinearOpMode {
                     rot = 0;
                     setPowers(yy,rot);
                 } else {
+
                     // K I'm not sure about any of these but thinking about them is difficult hh
                     state += 2;
                     if (vu == vu.RIGHT) {
@@ -138,7 +139,7 @@ public class AutoWithoutEncoders extends LinearOpMode {
 
                 if (color.blue()/2 > color.red()) {
                     arm.setPower(0);
-                    setPowers(-0.8,0);
+                    setPowers(-0.4,0);
                     sleep(HITBALL);
                     setPowers(0,0);
 
@@ -148,8 +149,8 @@ public class AutoWithoutEncoders extends LinearOpMode {
                     sleep(1000);
 
 
-                    //setPowers(0.8,0);
-                    //sleep(HITBALL);
+                    setPowers(0.2,0);
+                    sleep(HITBALL);
 
                     state = 1;
 
@@ -157,7 +158,7 @@ public class AutoWithoutEncoders extends LinearOpMode {
 
                 if (color.blue() < color.red()/2) {
                     arm.setPower(0);
-                    setPowers(0.8,0);
+                    setPowers(0.4,0);
                     sleep(HITBALL);
                     setPowers(0,0);
 
@@ -167,8 +168,8 @@ public class AutoWithoutEncoders extends LinearOpMode {
                     sleep(1000);
 
 
-                    //setPowers(-0.8,0);
-                    //sleep(HITBALL);
+                    setPowers(-0.2,0);
+                    sleep(HITBALL);
 
                     state = 1;
                     closer = 1;
@@ -186,21 +187,21 @@ public class AutoWithoutEncoders extends LinearOpMode {
                 telemetry.update();
             }
             else {
-                setPowers(0.8, 0);
+                setPowers(0.4, 0);
                 sleep(distance + closer * DIFF);
 
-                setPowers( 0, -0.8);
+                setPowers( 0, -0.4);
                 sleep(ROTATE_NINETY);
 
-                setPowers( -0.8, 0);
+                setPowers( -0.4, 0);
                 sleep(LAST_PUSH);
 
-                //transparent.setPower(0.8);
+                //slide.setPower(0.4);
                 //sleep(1000);
-                //transparent.setPower(-0.8);
+                //slide.setPower(-0.4);
                 //sleep(1000);
 
-                setPowers( 0.8, 0);
+                setPowers( 0.4, 0);
                 sleep(LAST_PUSH);
                 setPowers(0,0);
                 sleep(20000);
