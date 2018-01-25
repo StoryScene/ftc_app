@@ -25,8 +25,8 @@ public class VeryTemporaryQuestionMark extends OpMode {
     @Override
     public void init() {
 
-        //leftDrive = hardwareMap.dcMotor.get("left");
-        //rightDrive = hardwareMap.dcMotor.get("right");
+        leftDrive = hardwareMap.dcMotor.get("left");
+        rightDrive = hardwareMap.dcMotor.get("right");
         intake1 = hardwareMap.dcMotor.get("in1");
         intake2 = hardwareMap.dcMotor.get("in2");
         //hold1 = hardwareMap.dcMotor.get("hold1");
