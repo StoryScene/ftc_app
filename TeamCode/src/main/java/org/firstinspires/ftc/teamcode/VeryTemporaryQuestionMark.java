@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 /**
@@ -20,7 +21,7 @@ public class VeryTemporaryQuestionMark extends OpMode {
     DcMotor intake2;
     //DcMotor hold1, hold2;
     DcMotor slide, score;
-    CRServo arm;
+    Servo arm;
 
     @Override
     public void init() {
@@ -33,7 +34,7 @@ public class VeryTemporaryQuestionMark extends OpMode {
         //hold2 = hardwareMap.dcMotor.get("hold2");
         slide = hardwareMap.dcMotor.get("slide");
         score = hardwareMap.dcMotor.get("score");
-        arm = hardwareMap.crservo.get("arm");
+        arm = hardwareMap.servo.get("arm");
 
 
         leftDrive.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -54,7 +55,7 @@ public class VeryTemporaryQuestionMark extends OpMode {
             intake1.setPower(-.5);
             intake2.setPower(-.5);
         }
-        else if (gamepad1.left_bumper && gamepad1.right_bumper) {
+        else if (gamepad1.left_bumper || gamepad1.right_bumper) {
             intake1.setPower(.5);
             intake2.setPower(.5);
         }
@@ -82,20 +83,20 @@ public class VeryTemporaryQuestionMark extends OpMode {
         score.setPower(Range.clip(gamepad2.right_stick_y, -1, 1));
 
         if (gamepad2.b) {
-            arm.setPower(0.5);
+            arm.setPosition(Range.clip(arm.getPosition() - 0.2,-1,1));
         }
         else if (gamepad2.y) {
-            arm.setPower(-0.5);
+            arm.setPosition(Range.clip(arm.getPosition() + 0.2,-1,1));
         }
-        else {
-            arm.setPower(0);
-        }
+
 
         telemetry.addData("left stick 1", gamepad1.left_stick_y);
         telemetry.addData("right stick 1", gamepad1.right_stick_y);
         telemetry.addData("right bumper",gamepad2.right_bumper);
         telemetry.addData("left bumper",gamepad2.left_bumper);
         telemetry.addData("right stick 2",gamepad2.right_stick_y);
+        telemetry.addData("right trigger",gamepad2.right_trigger);
+        telemetry.addData("left trigger",gamepad2.left_trigger);
 
         //telemetry.addData("hold1: ", hold1.getPower());
         telemetry.addData("intake1: ", intake1.getPower());
