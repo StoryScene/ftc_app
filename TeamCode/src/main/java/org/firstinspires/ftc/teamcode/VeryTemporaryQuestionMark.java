@@ -37,7 +37,7 @@ public class VeryTemporaryQuestionMark extends OpMode {
         arm = hardwareMap.servo.get("arm");
 
 
-        leftDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightDrive.setDirection(DcMotorSimple.Direction.REVERSE);
         intake2.setDirection(DcMotorSimple.Direction.REVERSE);
         //hold2.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -51,11 +51,11 @@ public class VeryTemporaryQuestionMark extends OpMode {
         rightDrive.setPower(gamepad1.right_stick_y);
 
 
-        if (gamepad1.left_trigger > 0.5 && gamepad1.right_trigger > 0.5){
+        if (gamepad1.left_bumper){
             intake1.setPower(-.5);
             intake2.setPower(-.5);
         }
-        else if (gamepad1.left_bumper || gamepad1.right_bumper) {
+        else if (gamepad1.right_bumper) {
             intake1.setPower(.5);
             intake2.setPower(.5);
         }
@@ -92,11 +92,10 @@ public class VeryTemporaryQuestionMark extends OpMode {
 
         telemetry.addData("left stick 1", gamepad1.left_stick_y);
         telemetry.addData("right stick 1", gamepad1.right_stick_y);
-        telemetry.addData("right bumper",gamepad2.right_bumper);
-        telemetry.addData("left bumper",gamepad2.left_bumper);
+        telemetry.addData("right bumper",gamepad1.right_bumper);
+        telemetry.addData("left bumper",gamepad1.left_bumper);
         telemetry.addData("right stick 2",gamepad2.right_stick_y);
-        telemetry.addData("right trigger",gamepad2.right_trigger);
-        telemetry.addData("left trigger",gamepad2.left_trigger);
+        telemetry.addData("actual arm pos", arm.getPosition());
 
         //telemetry.addData("hold1: ", hold1.getPower());
         telemetry.addData("intake1: ", intake1.getPower());
