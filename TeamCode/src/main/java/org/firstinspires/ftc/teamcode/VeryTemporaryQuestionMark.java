@@ -47,8 +47,8 @@ public class VeryTemporaryQuestionMark extends OpMode {
     public void loop() {
 
 
-        leftDrive.setPower(gamepad1.left_stick_y);
-        rightDrive.setPower(gamepad1.right_stick_y);
+        leftDrive.setPower(discreteDrive(gamepad1.left_stick_y));
+        rightDrive.setPower(discreteDrive(gamepad1.right_stick_y));
 
 
         if (gamepad1.left_bumper){
@@ -101,4 +101,19 @@ public class VeryTemporaryQuestionMark extends OpMode {
         telemetry.addData("intake1: ", intake1.getPower());
         telemetry.update();
     }
+
+    private double discreteDrive(double x){
+        x = Range.clip(x, -1, 1);
+        if (Math.abs(x) < 0.1){
+            return 0;
+        }
+        if (Math.abs(x) < 0.4){
+            return Math.signum(x) * 0.25;
+        }
+        if (Math.abs(x) < 0.9){
+            return Math.signum(x) * 0.5;
+        }
+        return Math.signum(x) * 1;
+    }
+
 }
