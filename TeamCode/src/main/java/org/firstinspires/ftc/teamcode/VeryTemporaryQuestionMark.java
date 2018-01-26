@@ -79,6 +79,19 @@ public class VeryTemporaryQuestionMark extends OpMode {
         }
         */
 
+        if(gamepad1.dpad_up) {
+            leftDrive.setPower(0.4);
+            rightDrive.setPower(0.4);
+        }
+        else if (gamepad1.dpad_down){
+            leftDrive.setPower(-0.4);
+            rightDrive.setPower(-0.4);
+        }
+        else if (gamepad1.dpad_left) {
+            leftDrive.setPower(-0.4);
+            rightDrive.setPower(0.4);
+        }
+
         slide.setPower(Range.clip(gamepad2.left_stick_y, -1, 1));
         score.setPower(Range.clip(gamepad2.right_stick_y, -1, 1));
 
