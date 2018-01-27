@@ -85,6 +85,7 @@ public class AutoWithoutEncoders extends LinearOpMode {
 
         while (opModeIsActive()) {
             if (state == 0 || state == 1){
+                arm.setPosition(0);
                 ArrayList vuMarkAndPos = lookForRelicImage(relicImage);
                 if (vu == RelicRecoveryVuMark.UNKNOWN) {
                     vu = (RelicRecoveryVuMark) vuMarkAndPos.get(0);
@@ -172,7 +173,6 @@ public class AutoWithoutEncoders extends LinearOpMode {
                 }
 
                 else{
-                    arm.setPosition(1);
                     setPowers(0,0);
                 }
 
@@ -182,13 +182,13 @@ public class AutoWithoutEncoders extends LinearOpMode {
                 telemetry.update();
             }
             else {
-                setPowers(0.6, 0);
+                setPowers(-0.6, 0);
                 sleep(distance + closer * DIFF);
 
                 setPowers( 0, -0.8);
                 sleep(ROTATE_NINETY);
 
-                setPowers( -0.6, 0);
+                setPowers( 0.6, 0);
                 sleep(LAST_PUSH);
 
                 score.setPower(0.5);
@@ -196,8 +196,8 @@ public class AutoWithoutEncoders extends LinearOpMode {
                 score.setPower(-0.5);
                 sleep(1000);
 
-                setPowers( 0.6, 0);
-                sleep(LAST_PUSH);
+                setPowers( -0.6, 0);
+                sleep(2*LAST_PUSH);
                 setPowers(0,0);
                 sleep(20000);
             }
