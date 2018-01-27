@@ -21,7 +21,7 @@ public class fourMotorTest extends OpMode {
     DcMotor grabLeft;
     DcMotor grabRight;
 
-    CRServo rotate1;
+    //CRServo rotate1;
     //Servo arm;
 
     public void init(){
@@ -29,7 +29,7 @@ public class fourMotorTest extends OpMode {
         motorRight = hardwareMap.dcMotor.get("right");
         grabLeft = hardwareMap.dcMotor.get("grab1");
         grabRight = hardwareMap.dcMotor.get("grab2");
-        rotate1 = hardwareMap.crservo.get("servo");
+        //rotate1 = hardwareMap.crservo.get("servo");
         //arm = hardwareMap.servo.get("arm");
 
         motorLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -42,7 +42,7 @@ public class fourMotorTest extends OpMode {
     }
     public void loop(){
 
-        double power = -.6*gamepad1.left_stick_y;
+        double power = -.4*gamepad1.left_stick_y;
 
         motorLeft.setPower(power);
         motorRight.setPower(-.6* gamepad1.right_stick_y);
@@ -61,15 +61,15 @@ public class fourMotorTest extends OpMode {
             grabLeft.setPower(0);
             grabRight.setPower(0);
         }
-        if (gamepad1.a == true) {
-            rotate1.setPower(1) ;
-        }
-        else if (gamepad1.b == true) {
-            rotate1.setPower(-1);
-        }
-        else{
-            rotate1.setPower(0);
-        }
+        //if (gamepad1.a == true) {
+            //rotate1.setPower(1) ;
+        //}
+        //else if (gamepad1.b == true) {
+            //rotate1.setPower(-1);
+        //}
+        //else{
+            //rotate1.setPower(0);
+        //}
         //if (gamepad1.left_bumper == true){
             //arm.setPosition(1);
         //}
