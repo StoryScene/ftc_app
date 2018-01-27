@@ -46,7 +46,7 @@ public class AutoWithoutEncoders extends LinearOpMode {
 
     final double maxPower = 0.6;
 
-    final int HITBALL = 200, ROTATE_NINETY = 1200, LAST_PUSH = 500;
+    final int HITBALL = 200, ROTATE_NINETY = 1000, LAST_PUSH = 500;
 
     int closer = 0;
     final int DIFF = 2*HITBALL;
