@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -37,15 +38,15 @@ public class AutoWithoutEncoders extends LinearOpMode {
 
     DcMotor lWheel;
     DcMotor rWheel;
-    DcMotor slide;
-    CRServo arm;
+    DcMotor score;
+    Servo arm;
     ColorSensor color;
 
     final double[] targetCoords = {0.1,0,-400};
 
     final double maxPower = 0.6;
 
-    final int HITBALL = 200, ROTATE_NINETY = 500, LAST_PUSH = 500;
+    final int HITBALL = 200, ROTATE_NINETY = 1200, LAST_PUSH = 500;
 
     int closer = 0;
     final int DIFF = 2*HITBALL;
@@ -55,7 +56,7 @@ public class AutoWithoutEncoders extends LinearOpMode {
     OpenGLMatrix lastLocation = null;
 
 
-    private int distance = 3000;
+    private int distance = 2500;
 
 
 
@@ -66,9 +67,9 @@ public class AutoWithoutEncoders extends LinearOpMode {
         lWheel = hardwareMap.dcMotor.get("leftWheel");
         rWheel = hardwareMap.dcMotor.get("rightWheel");
 
-        slide = hardwareMap.dcMotor.get("slide");
+        score = hardwareMap.dcMotor.get("score");
 
-        arm = hardwareMap.crservo.get("arm");
+        arm = hardwareMap.servo.get("arm");
         color = hardwareMap.colorSensor.get("color");
 
         VuforiaTrackable relicImage = setUpVuforia();
@@ -121,11 +122,11 @@ public class AutoWithoutEncoders extends LinearOpMode {
                 state += 2;
 
                 if (vu == vu.RIGHT) {
-                    distance = 3000;
+                    distance = 2550;
                 } else if (vu == vu.CENTER) {
-                    distance = 4000;
+                    distance = 2650;
                 } else if (vu == vu.LEFT) {
-                    distance = 5000;
+                    distance = 2750;
                 } else {
                     state -= 2;
                 }
@@ -133,23 +134,20 @@ public class AutoWithoutEncoders extends LinearOpMode {
 
             else if (state == 2) {
 
-                arm.setPower(0.5);
+                arm.setPosition(1);
                 setPowers(0,0);
-                telemetry.addData("Current arm power: ", arm.getPower());
+                telemetry.addData("Current arm position: ", arm.getPosition());
 
                 if (color.blue()/2 > color.red()) {
-                    arm.setPower(0);
+                    arm.setPosition(1);
                     setPowers(-0.6,0);
                     sleep(HITBALL);
                     setPowers(0,0);
 
-                    arm.setPower(-0.5);
+                    arm.setPosition(0);
                     sleep(2000);
-                    arm.setPower(0);
-                    sleep(1000);
 
-
-                    setPowers(0.2,0);
+                    setPowers(0.6,0);
                     sleep(HITBALL);
 
                     state = 1;
@@ -157,16 +155,13 @@ public class AutoWithoutEncoders extends LinearOpMode {
                 }
 
                 if (color.blue() < color.red()/2) {
-                    arm.setPower(0);
+                    arm.setPosition(1);
                     setPowers(0.6,0);
                     sleep(HITBALL);
                     setPowers(0,0);
 
-                    arm.setPower(-0.5);
+                    arm.setPosition(0);
                     sleep(2000);
-                    arm.setPower(0);
-                    sleep(1000);
-
 
                     setPowers(-0.2,0);
                     sleep(HITBALL);
@@ -177,7 +172,7 @@ public class AutoWithoutEncoders extends LinearOpMode {
                 }
 
                 else{
-                    arm.setPower(0);
+                    arm.setPosition(1);
                     setPowers(0,0);
                 }
 
@@ -190,16 +185,16 @@ public class AutoWithoutEncoders extends LinearOpMode {
                 setPowers(0.6, 0);
                 sleep(distance + closer * DIFF);
 
-                setPowers( 0, -0.6);
+                setPowers( 0, -0.8);
                 sleep(ROTATE_NINETY);
 
                 setPowers( -0.6, 0);
                 sleep(LAST_PUSH);
 
-                //slide.setPower(0.6);
-                //sleep(1000);
-                //slide.setPower(-0.6);
-                //sleep(1000);
+                score.setPower(0.5);
+                sleep(1000);
+                score.setPower(-0.5);
+                sleep(1000);
 
                 setPowers( 0.6, 0);
                 sleep(LAST_PUSH);
