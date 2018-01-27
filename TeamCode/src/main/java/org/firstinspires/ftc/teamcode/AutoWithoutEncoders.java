@@ -43,7 +43,7 @@ public class AutoWithoutEncoders extends LinearOpMode {
 
     final double[] targetCoords = {0.1,0,-400};
 
-    final double maxPower = 0.4;
+    final double maxPower = 0.6;
 
     final int HITBALL = 200, ROTATE_NINETY = 500, LAST_PUSH = 500;
 
@@ -139,7 +139,7 @@ public class AutoWithoutEncoders extends LinearOpMode {
 
                 if (color.blue()/2 > color.red()) {
                     arm.setPower(0);
-                    setPowers(-0.4,0);
+                    setPowers(-0.6,0);
                     sleep(HITBALL);
                     setPowers(0,0);
 
@@ -158,7 +158,7 @@ public class AutoWithoutEncoders extends LinearOpMode {
 
                 if (color.blue() < color.red()/2) {
                     arm.setPower(0);
-                    setPowers(0.4,0);
+                    setPowers(0.6,0);
                     sleep(HITBALL);
                     setPowers(0,0);
 
@@ -187,21 +187,21 @@ public class AutoWithoutEncoders extends LinearOpMode {
                 telemetry.update();
             }
             else {
-                setPowers(0.4, 0);
+                setPowers(0.6, 0);
                 sleep(distance + closer * DIFF);
 
-                setPowers( 0, -0.4);
+                setPowers( 0, -0.6);
                 sleep(ROTATE_NINETY);
 
-                setPowers( -0.4, 0);
+                setPowers( -0.6, 0);
                 sleep(LAST_PUSH);
 
-                //slide.setPower(0.4);
+                //slide.setPower(0.6);
                 //sleep(1000);
-                //slide.setPower(-0.4);
+                //slide.setPower(-0.6);
                 //sleep(1000);
 
-                setPowers( 0.4, 0);
+                setPowers( 0.6, 0);
                 sleep(LAST_PUSH);
                 setPowers(0,0);
                 sleep(20000);
