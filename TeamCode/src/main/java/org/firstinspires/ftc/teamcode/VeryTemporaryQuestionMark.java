@@ -93,7 +93,7 @@ public class VeryTemporaryQuestionMark extends OpMode {
         }
 
         slide.setPower(Range.clip(gamepad2.left_stick_y, -1, 1));
-        score.setPower(Range.clip(gamepad2.right_stick_y, -0.6, 0.6));
+        score.setPower(Range.clip(gamepad2.right_stick_y, -0.5, 0.5));
 
         if (gamepad2.b) {
             arm.setPosition(Range.clip(arm.getPosition() - 0.02,-1,1));
