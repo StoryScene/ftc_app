@@ -199,11 +199,11 @@ public class BlueWithoutEncoders extends LinearOpMode {
                 float[] usefulCoords = {pos[2], pos[12], pos[14]};
 
                 if (vu == vu.LEFT) {
-                    distance = 500;
+                    distance = 200;
                 } else if (vu == vu.CENTER) {
                     distance = 600;
                 } else if (vu == vu.RIGHT) {
-                    distance = 700;
+                    distance = 1000;
                 }
 
                 telemetry.addData("State: ", state);
@@ -231,13 +231,16 @@ public class BlueWithoutEncoders extends LinearOpMode {
                 telemetry.addData("Code Loc:", "2");
                 telemetry.update();
                 sleep(LAST_PUSH);
+                setPowers( 0, 0);
 
-                score.setPower(0.5);
+                score.setPower(0.3);
                 telemetry.addData("Code Loc:", "3");
                 telemetry.update();
                 sleep(400);
-                score.setPower(-0.5);
+                score.setPower(0);
+                score.setPower(-0.3);
                 sleep(400);
+                score.setPower(0);
 
                 setPowers( -0.6, 0);
                 sleep(LAST_PUSH);
