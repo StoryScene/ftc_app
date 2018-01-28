@@ -46,7 +46,7 @@ public class BlueWithoutEncoders extends LinearOpMode {
 
     final double maxPower = 0.6;
 
-    final int HITBALL = 100, ROTATE_NINETY = 800, LAST_PUSH = 300, DRIVE_FIRST = 100;
+    final int HITBALL = 100, ROTATE_NINETY = 800, LAST_PUSH = 500, DRIVE_FIRST = 100;
 
     int closer = 0;
     final int DIFF = 2*HITBALL;
@@ -126,11 +126,11 @@ public class BlueWithoutEncoders extends LinearOpMode {
                 state += 2;
 
                 if (vu == vu.LEFT) {
-                    distance = 1000;
+                    distance = 200;
                 } else if (vu == vu.CENTER) {
-                    distance = 1200;
+                    distance = 600;
                 } else if (vu == vu.RIGHT) {
-                    distance = 1400;
+                    distance = 1000;
                 }
                 telemetry.addData("State: ", state);
                 telemetry.update();
@@ -236,11 +236,12 @@ public class BlueWithoutEncoders extends LinearOpMode {
                 score.setPower(0.3);
                 telemetry.addData("Code Loc:", "3");
                 telemetry.update();
-                sleep(400);
+                sleep(1000);
                 score.setPower(0);
                 score.setPower(-0.3);
-                sleep(400);
+                sleep(1000);
                 score.setPower(0);
+                sleep(300);
 
                 setPowers( -0.6, 0);
                 sleep(LAST_PUSH);
