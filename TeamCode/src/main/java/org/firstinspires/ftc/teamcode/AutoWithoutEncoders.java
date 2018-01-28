@@ -46,17 +46,17 @@ public class AutoWithoutEncoders extends LinearOpMode {
 
     final double maxPower = 0.6;
 
-    final int HITBALL = 150, ROTATE_NINETY = 1000, LAST_PUSH = 500;
+    final int HITBALL = 100, ROTATE_NINETY = 600, LAST_PUSH = 500, DRIVE_FIRST = 100;
 
     int closer = 0;
-    final int DIFF = 0;
+    final int DIFF = 2*HITBALL;
 
 
     public static final String TAG = "Vuforia VuMark Sample";
     OpenGLMatrix lastLocation = null;
 
 
-    private int distance = 2550;
+    private int distance = 800;
 
 
 
@@ -64,8 +64,8 @@ public class AutoWithoutEncoders extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        lWheel = hardwareMap.dcMotor.get("leftWheel");
-        rWheel = hardwareMap.dcMotor.get("rightWheel");
+        lWheel = hardwareMap.dcMotor.get("left");
+        rWheel = hardwareMap.dcMotor.get("right");
 
         lWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -76,6 +76,7 @@ public class AutoWithoutEncoders extends LinearOpMode {
         color = hardwareMap.colorSensor.get("color");
 
         VuforiaTrackable relicImage = setUpVuforia();
+
 
         waitForStart();
         boolean prepared = false;
@@ -124,92 +125,135 @@ public class AutoWithoutEncoders extends LinearOpMode {
 
                 state += 2;
 
-                if (vu == vu.RIGHT) {
-                    distance = 2550;
+                if (vu == vu.LEFT) {
+                    distance = 200;
                 } else if (vu == vu.CENTER) {
-                    distance = 2650;
-                } else if (vu == vu.LEFT) {
-                    distance = 2750;
-                } else {
-                    state -= 2;
+                    distance = 600;
+                } else if (vu == vu.RIGHT) {
+                    distance = 1000;
                 }
+                telemetry.addData("State: ", state);
+                telemetry.update();
             }
 
             else if (state == 2) {
 
                 arm.setPosition(1);
                 setPowers(0,0);
+                sleep(1000);
                 telemetry.addData("Current arm position: ", arm.getPosition());
 
                 if (color.blue()/2 > color.red()) {
-                    arm.setPosition(1);
                     setPowers(0,0.8);
                     sleep(HITBALL);
                     setPowers(0,0);
 
                     arm.setPosition(0);
-                    sleep(2000);
+                    sleep(1000);
 
-                    setPowers(0,-0.8);
+                    setPowers(0,-0.7);
                     sleep(HITBALL);
 
+                    setPowers(-0.6, 0);
+                    sleep(DRIVE_FIRST);
+                    setPowers(0,0);
+
+                    closer = 1;
                     state = 1;
 
                 }
 
                 if (color.blue() < color.red()/2) {
-                    arm.setPosition(1);
-                    setPowers(0,-0.8);
+                    setPowers(0,-0.7);
                     sleep(HITBALL);
                     setPowers(0,0);
 
                     arm.setPosition(0);
-                    sleep(2000);
+                    sleep(1000);
 
                     setPowers(0,0.8);
                     sleep(HITBALL);
 
-                    state = 1;
-                    closer = 1;
+                    setPowers(-0.6, 0);
+                    sleep(DRIVE_FIRST);
+                    setPowers(0,0);
 
+                    state = 1;
                 }
 
                 else{
                     setPowers(0,0);
                 }
 
-                arm.resetDeviceConfigurationForOpMode();
-                arm.setPosition(-1);
+                sleep(500);
 
+                ArrayList vuMarkAndPos = lookForRelicImage(relicImage);
+                if (vu == RelicRecoveryVuMark.UNKNOWN) {
+                    vu = (RelicRecoveryVuMark) vuMarkAndPos.get(0);
+                }
+                float[] pos = (float[]) vuMarkAndPos.get(1);
+
+                // While only pos[2], pos[12] and pos[14] are useful.
+                // 2 is the angle  (looking to the left is positive)
+                // 12 is the distance (left/right)  (left is negative)
+                // 14 is the distance (front/back)  (away from photo is negative)
+
+                float[] usefulCoords = {pos[2], pos[12], pos[14]};
+
+                if (vu == vu.LEFT) {
+                    distance = 200;
+                } else if (vu == vu.CENTER) {
+                    distance = 600;
+                } else if (vu == vu.RIGHT) {
+                    distance = 1000;
+                }
+
+                telemetry.addData("State: ", state);
                 telemetry.addData("Dis: ", distance);
                 telemetry.addData("Actual powers: ", lWheel.getPower()+ " " +  rWheel.getPower());
                 telemetry.update();
+
             }
             else {
-                arm.resetDeviceConfigurationForOpMode();
-                arm.setPosition(-1);
-
-                setPowers(-0.6, 0);
-                sleep(distance + closer * DIFF);
-                telemetry.addData("Driving distance:", distance + closer * DIFF);
+                telemetry.addData("State: ", state);
                 telemetry.update();
 
-                setPowers( 0, -0.8);
-                sleep(ROTATE_NINETY);
+                setPowers(-0.6, 0);
+                telemetry.addData("Code Loc:", "0");
+                telemetry.addData("Driving distance:", distance + closer * DIFF);
+                telemetry.update();
+                sleep(distance + closer * DIFF - DRIVE_FIRST);
 
-                setPowers( -0.6, 0);
-                sleep(LAST_PUSH);
+                setPowers( 0, -0.8);
+                telemetry.addData("Code Loc:", "1");
+                telemetry.update();
+                sleep(ROTATE_NINETY);
+                setPowers(0,0);
+                sleep(200);
+
+                setPowers(-0.6, 0);
+                telemetry.addData("Code Loc:", "2");
+                telemetry.update();
+                sleep(2*LAST_PUSH);
+                setPowers( 0, 0);
+                sleep(200);
 
                 score.setPower(0.5);
-                sleep(1000);
+                telemetry.addData("Dis:", distance);
+                telemetry.addData("Code Loc:", "3");
+                telemetry.update();
+                sleep(800);
+                score.setPower(0);
                 score.setPower(-0.5);
-                sleep(1000);
+                sleep(800);
+                score.setPower(0);
+                sleep(300);
 
-                setPowers( -0.6, 0);
+                setPowers(-0.6, 0);
                 sleep(LAST_PUSH);
 
-                setPowers( 0.6, 0);
-                sleep(2*LAST_PUSH);
+                setPowers(0.6, 0);
+                sleep(LAST_PUSH/2);
                 setPowers(0,0);
                 sleep(20000);
             }
@@ -391,3 +435,4 @@ public class AutoWithoutEncoders extends LinearOpMode {
         return Math.max(Math.max(x,y), Math.max(z,w));
     }
 }
+
