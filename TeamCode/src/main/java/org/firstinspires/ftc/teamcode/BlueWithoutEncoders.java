@@ -29,7 +29,7 @@ import java.util.ArrayList;
  * Created by Emma on 01/12/18.
  */
 
-@Autonomous(name = "Red Without Encoders")
+@Autonomous(name = "Bluye Without Encoders")
 public class BlueWithoutEncoders extends LinearOpMode {
 
 
@@ -46,7 +46,7 @@ public class BlueWithoutEncoders extends LinearOpMode {
 
     final double maxPower = 0.6;
 
-    final int HITBALL = 150, ROTATE_NINETY = 1000, LAST_PUSH = 500;
+    final int HITBALL = 150, ROTATE_NINETY = 1000, LAST_PUSH = 500, DRIVE_FIRST = 800;
 
     int closer = 0;
     final int DIFF = 2*HITBALL;
@@ -130,7 +130,8 @@ public class BlueWithoutEncoders extends LinearOpMode {
                     distance = 2650;
                 } else if (vu == vu.RIGHT) {
                     distance = 2750;
-                } else {
+                }
+                else if (state == 3) {
                     state -= 2;
                 }
             }
@@ -153,6 +154,10 @@ public class BlueWithoutEncoders extends LinearOpMode {
                     setPowers(0,0.8);
                     sleep(HITBALL);
 
+                    setPowers(0.6, 0);
+                    sleep(DRIVE_FIRST);
+                    setPowers(0,0);
+
                     closer = 1;
                     state = 1;
 
@@ -169,6 +174,10 @@ public class BlueWithoutEncoders extends LinearOpMode {
 
                     setPowers(0,-0.8);
                     sleep(HITBALL);
+
+                    setPowers(0.6, 0);
+                    sleep(DRIVE_FIRST);
+                    setPowers(0,0);
 
                     state = 1;
 
@@ -191,7 +200,7 @@ public class BlueWithoutEncoders extends LinearOpMode {
                 arm.setPosition(-1);
 
                 setPowers(0.6, 0);
-                sleep(distance + closer * DIFF);
+                sleep(distance + closer * DIFF - DRIVE_FIRST);
                 telemetry.addData("Driving distance:", distance + closer * DIFF);
                 telemetry.update();
 
