@@ -46,7 +46,7 @@ public class BlueWithoutEncoders extends LinearOpMode {
 
     final double maxPower = 0.6;
 
-    final int HITBALL = 100, ROTATE_NINETY = 800, LAST_PUSH = 500, DRIVE_FIRST = 100;
+    final int HITBALL = 100, ROTATE_NINETY = 600, LAST_PUSH = 500, DRIVE_FIRST = 100;
 
     int closer = 0;
     final int DIFF = 2*HITBALL;
@@ -56,7 +56,7 @@ public class BlueWithoutEncoders extends LinearOpMode {
     OpenGLMatrix lastLocation = null;
 
 
-    private int distance = 1100;
+    private int distance = 800;
 
 
 
@@ -185,6 +185,8 @@ public class BlueWithoutEncoders extends LinearOpMode {
                     setPowers(0,0);
                 }
 
+                sleep(500);
+
                 ArrayList vuMarkAndPos = lookForRelicImage(relicImage);
                 if (vu == RelicRecoveryVuMark.UNKNOWN) {
                     vu = (RelicRecoveryVuMark) vuMarkAndPos.get(0);
@@ -226,21 +228,24 @@ public class BlueWithoutEncoders extends LinearOpMode {
                 telemetry.addData("Code Loc:", "1");
                 telemetry.update();
                 sleep(ROTATE_NINETY);
+                setPowers(0,0);
+                sleep(200);
 
                 setPowers( -0.6, 0);
                 telemetry.addData("Code Loc:", "2");
                 telemetry.update();
-                sleep(LAST_PUSH);
+                sleep(2*LAST_PUSH);
                 setPowers( 0, 0);
+                sleep(200);
 
-                score.setPower(0.45);
+                score.setPower(0.5);
                 telemetry.addData("Dis:", distance);
                 telemetry.addData("Code Loc:", "3");
                 telemetry.update();
-                sleep(500);
+                sleep(800);
                 score.setPower(0);
-                score.setPower(-0.45);
-                sleep(500);
+                score.setPower(-0.5);
+                sleep(800);
                 score.setPower(0);
                 sleep(300);
 
