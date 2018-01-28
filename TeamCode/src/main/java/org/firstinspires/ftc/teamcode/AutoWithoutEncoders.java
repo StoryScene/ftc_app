@@ -46,17 +46,17 @@ public class AutoWithoutEncoders extends LinearOpMode {
 
     final double maxPower = 0.6;
 
-    final int HITBALL = 200, ROTATE_NINETY = 1000, LAST_PUSH = 500;
+    final int HITBALL = 150, ROTATE_NINETY = 1000, LAST_PUSH = 500;
 
     int closer = 0;
-    final int DIFF = 2*HITBALL;
+    final int DIFF = 0;
 
 
     public static final String TAG = "Vuforia VuMark Sample";
     OpenGLMatrix lastLocation = null;
 
 
-    private int distance = 2500;
+    private int distance = 2550;
 
 
 
@@ -66,6 +66,9 @@ public class AutoWithoutEncoders extends LinearOpMode {
 
         lWheel = hardwareMap.dcMotor.get("leftWheel");
         rWheel = hardwareMap.dcMotor.get("rightWheel");
+
+        lWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         score = hardwareMap.dcMotor.get("score");
 
@@ -85,7 +88,6 @@ public class AutoWithoutEncoders extends LinearOpMode {
 
         while (opModeIsActive()) {
             if (state == 0 || state == 1){
-                arm.setPosition(0);
                 ArrayList vuMarkAndPos = lookForRelicImage(relicImage);
                 if (vu == RelicRecoveryVuMark.UNKNOWN) {
                     vu = (RelicRecoveryVuMark) vuMarkAndPos.get(0);
@@ -141,14 +143,14 @@ public class AutoWithoutEncoders extends LinearOpMode {
 
                 if (color.blue()/2 > color.red()) {
                     arm.setPosition(1);
-                    setPowers(-0.6,0);
+                    setPowers(0,0.8);
                     sleep(HITBALL);
                     setPowers(0,0);
 
                     arm.setPosition(0);
                     sleep(2000);
 
-                    setPowers(0.6,0);
+                    setPowers(0,-0.8);
                     sleep(HITBALL);
 
                     state = 1;
@@ -157,14 +159,14 @@ public class AutoWithoutEncoders extends LinearOpMode {
 
                 if (color.blue() < color.red()/2) {
                     arm.setPosition(1);
-                    setPowers(0.6,0);
+                    setPowers(0,-0.8);
                     sleep(HITBALL);
                     setPowers(0,0);
 
                     arm.setPosition(0);
                     sleep(2000);
 
-                    setPowers(-0.2,0);
+                    setPowers(0,0.8);
                     sleep(HITBALL);
 
                     state = 1;
@@ -176,19 +178,26 @@ public class AutoWithoutEncoders extends LinearOpMode {
                     setPowers(0,0);
                 }
 
+                arm.resetDeviceConfigurationForOpMode();
+                arm.setPosition(-1);
 
                 telemetry.addData("Dis: ", distance);
                 telemetry.addData("Actual powers: ", lWheel.getPower()+ " " +  rWheel.getPower());
                 telemetry.update();
             }
             else {
+                arm.resetDeviceConfigurationForOpMode();
+                arm.setPosition(-1);
+
                 setPowers(-0.6, 0);
                 sleep(distance + closer * DIFF);
+                telemetry.addData("Driving distance:", distance + closer * DIFF);
+                telemetry.update();
 
                 setPowers( 0, -0.8);
                 sleep(ROTATE_NINETY);
 
-                setPowers( 0.6, 0);
+                setPowers( -0.6, 0);
                 sleep(LAST_PUSH);
 
                 score.setPower(0.5);
@@ -197,6 +206,9 @@ public class AutoWithoutEncoders extends LinearOpMode {
                 sleep(1000);
 
                 setPowers( -0.6, 0);
+                sleep(LAST_PUSH);
+
+                setPowers( 0.6, 0);
                 sleep(2*LAST_PUSH);
                 setPowers(0,0);
                 sleep(20000);
