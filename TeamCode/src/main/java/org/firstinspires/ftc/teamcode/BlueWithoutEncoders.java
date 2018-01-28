@@ -247,7 +247,7 @@ public class BlueWithoutEncoders extends LinearOpMode {
                 sleep(LAST_PUSH);
 
                 setPowers( 0.6, 0);
-                sleep(2*LAST_PUSH);
+                sleep(LAST_PUSH/2);
                 setPowers(0,0);
                 sleep(20000);
             }
