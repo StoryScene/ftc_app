@@ -204,19 +204,27 @@ public class BlueWithoutEncoders extends LinearOpMode {
                 arm.resetDeviceConfigurationForOpMode();
                 arm.setPosition(-1);
                 sleep(1000);
+                arm.resetDeviceConfigurationForOpMode();
 
                 setPowers(0.6, 0);
-                sleep(distance + closer * DIFF - DRIVE_FIRST);
+                telemetry.addData("Code Loc:", "0");
                 telemetry.addData("Driving distance:", distance + closer * DIFF);
                 telemetry.update();
+                sleep(distance + closer * DIFF - DRIVE_FIRST);
 
                 setPowers( 0, -0.8);
+                telemetry.addData("Code Loc:", "1");
+                telemetry.update();
                 sleep(ROTATE_NINETY);
 
                 setPowers( -0.6, 0);
+                telemetry.addData("Code Loc:", "2");
+                telemetry.update();
                 sleep(LAST_PUSH);
 
                 score.setPower(0.5);
+                telemetry.addData("Code Loc:", "3");
+                telemetry.update();
                 sleep(1000);
                 score.setPower(-0.5);
                 sleep(1000);
