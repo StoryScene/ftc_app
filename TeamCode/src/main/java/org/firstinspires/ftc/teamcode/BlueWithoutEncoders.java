@@ -46,7 +46,7 @@ public class BlueWithoutEncoders extends LinearOpMode {
 
     final double maxPower = 0.6;
 
-    final int HITBALL = 150, ROTATE_NINETY = 1000, LAST_PUSH = 500, DRIVE_FIRST = 100;
+    final int HITBALL = 100, ROTATE_NINETY = 800, LAST_PUSH = 300, DRIVE_FIRST = 100;
 
     int closer = 0;
     final int DIFF = 2*HITBALL;
@@ -56,7 +56,7 @@ public class BlueWithoutEncoders extends LinearOpMode {
     OpenGLMatrix lastLocation = null;
 
 
-    private int distance = 2550;
+    private int distance = 1100;
 
 
 
@@ -144,14 +144,12 @@ public class BlueWithoutEncoders extends LinearOpMode {
                 telemetry.addData("Current arm position: ", arm.getPosition());
 
                 if (color.blue()/2 < color.red()) {
-                    arm.setPosition(1);
-                    sleep(1000);
                     setPowers(0,0.8);
                     sleep(HITBALL);
                     setPowers(0,0);
 
                     arm.setPosition(0);
-                    sleep(2000);
+                    sleep(1000);
 
                     setPowers(0,-0.8);
                     sleep(HITBALL);
@@ -166,14 +164,12 @@ public class BlueWithoutEncoders extends LinearOpMode {
                 }
 
                 if (color.blue() > color.red()/2) {
-                    arm.setPosition(1);
-                    sleep(1000);
                     setPowers(0,-0.8);
                     sleep(HITBALL);
                     setPowers(0,0);
 
                     arm.setPosition(0);
-                    sleep(2000);
+                    sleep(1000);
 
                     setPowers(0,0.8);
                     sleep(HITBALL);
@@ -203,11 +199,11 @@ public class BlueWithoutEncoders extends LinearOpMode {
                 float[] usefulCoords = {pos[2], pos[12], pos[14]};
 
                 if (vu == vu.LEFT) {
-                    distance = 1000;
+                    distance = 500;
                 } else if (vu == vu.CENTER) {
-                    distance = 1200;
+                    distance = 600;
                 } else if (vu == vu.RIGHT) {
-                    distance = 1400;
+                    distance = 700;
                 }
 
                 telemetry.addData("State: ", state);
@@ -239,9 +235,9 @@ public class BlueWithoutEncoders extends LinearOpMode {
                 score.setPower(0.5);
                 telemetry.addData("Code Loc:", "3");
                 telemetry.update();
-                sleep(1000);
+                sleep(400);
                 score.setPower(-0.5);
-                sleep(1000);
+                sleep(400);
 
                 setPowers( -0.6, 0);
                 sleep(LAST_PUSH);
