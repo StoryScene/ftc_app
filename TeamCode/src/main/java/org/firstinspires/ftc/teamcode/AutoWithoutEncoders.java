@@ -56,7 +56,7 @@ public class AutoWithoutEncoders extends LinearOpMode {
     OpenGLMatrix lastLocation = null;
 
 
-    private int distance = 850;
+    private int distance = 900;
 
 
 
@@ -126,11 +126,11 @@ public class AutoWithoutEncoders extends LinearOpMode {
                 state += 2;
 
                 if (vu == vu.LEFT) {
-                    distance = 1050;
+                    distance = 1000;
                 } else if (vu == vu.CENTER) {
                     distance = 950;
                 } else if (vu == vu.RIGHT) {
-                    distance = 850;
+                    distance = 900;
                 }
                 telemetry.addData("State: ", state);
                 telemetry.update();
@@ -232,16 +232,16 @@ public class AutoWithoutEncoders extends LinearOpMode {
                 sleep(200);
 
 
-                //score.setPower(-0.5);
+                score.setPower(-0.5);
                 telemetry.addData("Dis:", distance);
                 telemetry.addData("Code Loc:", "3");
                 telemetry.update();
                 sleep(800);
-                //score.setPower(0);
+                score.setPower(0);
                 sleep(500);
-                //score.setPower(0.6);
+                score.setPower(0.6);
                 sleep(1000);
-                //score.setPower(0);
+                score.setPower(0);
 
 
                 setPowers(-0.6, 0);
