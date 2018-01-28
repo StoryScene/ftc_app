@@ -238,12 +238,12 @@ public class AutoWithoutEncoders extends LinearOpMode {
                 telemetry.update();
                 sleep(800);
                 score.setPower(0);
-
+                sleep(100);
                 score.setPower(-0.5);
                 sleep(800);
+                score.setPower(0);
 
 
-                /*
                 setPowers(-0.6, 0);
                 telemetry.addData("Code Loc:", "2");
                 telemetry.update();
@@ -251,6 +251,7 @@ public class AutoWithoutEncoders extends LinearOpMode {
                 setPowers( 0, 0);
                 sleep(200);
 
+                /*
                 setPowers(0.6, 0);
                 sleep(LAST_PUSH);
                 score.setPower(0);
