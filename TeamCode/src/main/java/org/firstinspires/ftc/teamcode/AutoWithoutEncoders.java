@@ -46,7 +46,7 @@ public class AutoWithoutEncoders extends LinearOpMode {
 
     final double maxPower = 0.6;
 
-    final int HITBALL = 100, ROTATE_NINETY = 550, LAST_PUSH = 500, DRIVE_FIRST = 0;
+    final int HITBALL = 100, ROTATE_NINETY = 530, LAST_PUSH = 500, DRIVE_FIRST = 0;
 
     int closer = 0;
     final int DIFF = 2*HITBALL;
@@ -56,7 +56,7 @@ public class AutoWithoutEncoders extends LinearOpMode {
     OpenGLMatrix lastLocation = null;
 
 
-    private int distance = 780;
+    private int distance = 850;
 
 
 
@@ -126,11 +126,11 @@ public class AutoWithoutEncoders extends LinearOpMode {
                 state += 2;
 
                 if (vu == vu.LEFT) {
-                    distance = 980;
+                    distance = 1050;
                 } else if (vu == vu.CENTER) {
-                    distance = 880;
+                    distance = 950;
                 } else if (vu == vu.RIGHT) {
-                    distance = 780;
+                    distance = 850;
                 }
                 telemetry.addData("State: ", state);
                 telemetry.update();
