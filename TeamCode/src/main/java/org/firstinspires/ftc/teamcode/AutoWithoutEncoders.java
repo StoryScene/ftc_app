@@ -46,7 +46,7 @@ public class AutoWithoutEncoders extends LinearOpMode {
 
     final double maxPower = 0.6;
 
-    final int HITBALL = 100, ROTATE_NINETY = 600, LAST_PUSH = 500, DRIVE_FIRST = 0;
+    final int HITBALL = 100, ROTATE_NINETY = 650, LAST_PUSH = 500, DRIVE_FIRST = 0;
 
     int closer = 0;
     final int DIFF = 2*HITBALL;
@@ -238,9 +238,9 @@ public class AutoWithoutEncoders extends LinearOpMode {
                 telemetry.update();
                 sleep(800);
                 score.setPower(0);
-                sleep(100);
-                score.setPower(-0.5);
-                sleep(800);
+                sleep(500);
+                score.setPower(-0.6);
+                sleep(1000);
                 score.setPower(0);
 
 
