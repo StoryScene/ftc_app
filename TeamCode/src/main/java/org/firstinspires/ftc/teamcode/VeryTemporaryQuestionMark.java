@@ -101,7 +101,16 @@ public class VeryTemporaryQuestionMark extends OpMode {
             rightDrive.setPower(0.6);
         }
 
-        relic.setPower(gamepad1.right_trigger);
+        if (gamepad2.dpad_up){
+            relic.setPower(0.6);
+        }
+        else if (gamepad2.dpad_down) {
+            relic.setPower(-0.6);
+        }
+        else {
+            relic.setPower(0);
+        }
+
 
         slide.setPower(Range.clip(gamepad2.left_stick_y, -1, 1));
         score.setPower(Range.clip(gamepad2.right_stick_y, -0.5, 0.5));
@@ -123,6 +132,8 @@ public class VeryTemporaryQuestionMark extends OpMode {
             turn.setPower(0);
         }
 
+
+
         if (gamepad2.left_bumper){
             grab.setPower(.5);
         }
@@ -135,11 +146,17 @@ public class VeryTemporaryQuestionMark extends OpMode {
 
 
 
+        telemetry.addData("Power of turn:", turn.getPower());
+        telemetry.addData("Power of grab:", grab.getPower());
+        telemetry.addData("gamepad2.a:", gamepad2.a);
+        telemetry.addData("relic power:", relic.getPower());
+
+
 
         telemetry.addData("left stick 1", gamepad1.left_stick_y);
         telemetry.addData("right stick 1", gamepad1.right_stick_y);
-        telemetry.addData("right bumper",gamepad1.right_bumper);
-        telemetry.addData("left bumper",gamepad1.left_bumper);
+        telemetry.addData("right bumper 2",gamepad2.right_bumper);
+        telemetry.addData("left bumper 2",gamepad2.left_bumper);
         telemetry.addData("right stick 2",gamepad2.right_stick_y);
         telemetry.addData("actual arm pos", arm.getPosition());
 
