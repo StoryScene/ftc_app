@@ -46,7 +46,7 @@ public class BlueWithoutEncoders extends LinearOpMode {
 
     final double maxPower = 0.6;
 
-    final int HITBALL = 150, ROTATE_NINETY = 1000, LAST_PUSH = 500, DRIVE_FIRST = 800;
+    final int HITBALL = 150, ROTATE_NINETY = 1000, LAST_PUSH = 500, DRIVE_FIRST = 100;
 
     int closer = 0;
     final int DIFF = 2*HITBALL;
@@ -126,15 +126,17 @@ public class BlueWithoutEncoders extends LinearOpMode {
                 state += 2;
 
                 if (vu == vu.LEFT) {
-                    distance = 2550;
+                    distance = 1000;
                 } else if (vu == vu.CENTER) {
-                    distance = 2650;
+                    distance = 1200;
                 } else if (vu == vu.RIGHT) {
-                    distance = 2750;
+                    distance = 1400;
                 }
                 else if (state == 3) {
                     state -= 2;
                 }
+                telemetry.addData("State: ", state);
+                telemetry.update();
             }
 
             else if (state == 2) {
@@ -147,14 +149,14 @@ public class BlueWithoutEncoders extends LinearOpMode {
                 if (color.blue()/2 < color.red()) {
                     arm.setPosition(1);
                     sleep(1000);
-                    setPowers(0,-0.8);
+                    setPowers(0,0.8);
                     sleep(HITBALL);
                     setPowers(0,0);
 
                     arm.setPosition(0);
                     sleep(2000);
 
-                    setPowers(0,0.8);
+                    setPowers(0,-0.8);
                     sleep(HITBALL);
 
                     setPowers(0.6, 0);
@@ -169,14 +171,14 @@ public class BlueWithoutEncoders extends LinearOpMode {
                 if (color.blue() > color.red()/2) {
                     arm.setPosition(1);
                     sleep(1000);
-                    setPowers(0,0.8);
+                    setPowers(0,-0.8);
                     sleep(HITBALL);
                     setPowers(0,0);
 
                     arm.setPosition(0);
                     sleep(2000);
 
-                    setPowers(0,-0.8);
+                    setPowers(0,0.8);
                     sleep(HITBALL);
 
                     setPowers(0.6, 0);
@@ -184,27 +186,19 @@ public class BlueWithoutEncoders extends LinearOpMode {
                     setPowers(0,0);
 
                     state = 1;
-
-
                 }
 
                 else{
                     setPowers(0,0);
                 }
 
-                arm.resetDeviceConfigurationForOpMode();
-                arm.setPosition(-1);
-                sleep(1000);
-
                 telemetry.addData("Dis: ", distance);
                 telemetry.addData("Actual powers: ", lWheel.getPower()+ " " +  rWheel.getPower());
                 telemetry.update();
             }
             else {
-                arm.resetDeviceConfigurationForOpMode();
-                arm.setPosition(-1);
-                sleep(1000);
-                arm.resetDeviceConfigurationForOpMode();
+                telemetry.addData("State: ", state);
+                telemetry.update();
 
                 setPowers(0.6, 0);
                 telemetry.addData("Code Loc:", "0");
