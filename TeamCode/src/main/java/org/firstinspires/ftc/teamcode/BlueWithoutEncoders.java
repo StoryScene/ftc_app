@@ -151,7 +151,7 @@ public class BlueWithoutEncoders extends LinearOpMode {
                     arm.setPosition(0);
                     sleep(1000);
 
-                    setPowers(0,-0.8);
+                    setPowers(0,-0.7);
                     sleep(HITBALL);
 
                     setPowers(0.6, 0);
@@ -164,7 +164,7 @@ public class BlueWithoutEncoders extends LinearOpMode {
                 }
 
                 if (color.blue() > color.red()/2) {
-                    setPowers(0,-0.8);
+                    setPowers(0,-0.7);
                     sleep(HITBALL);
                     setPowers(0,0);
 
@@ -233,13 +233,14 @@ public class BlueWithoutEncoders extends LinearOpMode {
                 sleep(LAST_PUSH);
                 setPowers( 0, 0);
 
-                score.setPower(0.3);
+                score.setPower(0.45);
+                telemetry.addData("Dis:", distance);
                 telemetry.addData("Code Loc:", "3");
                 telemetry.update();
-                sleep(1000);
+                sleep(500);
                 score.setPower(0);
-                score.setPower(-0.3);
-                sleep(1000);
+                score.setPower(-0.45);
+                sleep(500);
                 score.setPower(0);
                 sleep(300);
 
