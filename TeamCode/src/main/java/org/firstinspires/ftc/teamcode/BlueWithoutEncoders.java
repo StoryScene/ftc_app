@@ -64,8 +64,8 @@ public class BlueWithoutEncoders extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        lWheel = hardwareMap.dcMotor.get("leftWheel");
-        rWheel = hardwareMap.dcMotor.get("rightWheel");
+        lWheel = hardwareMap.dcMotor.get("left");
+        rWheel = hardwareMap.dcMotor.get("right");
 
         lWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -76,6 +76,7 @@ public class BlueWithoutEncoders extends LinearOpMode {
         color = hardwareMap.colorSensor.get("color");
 
         VuforiaTrackable relicImage = setUpVuforia();
+
 
         waitForStart();
         boolean prepared = false;

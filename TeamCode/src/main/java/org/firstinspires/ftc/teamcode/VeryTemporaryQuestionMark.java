@@ -47,7 +47,7 @@ public class VeryTemporaryQuestionMark extends OpMode {
 
 
         rightDrive.setDirection(DcMotorSimple.Direction.REVERSE);
-        //intake2.setDirection(DcMotorSimple.Direction.REVERSE);
+        intake2.setDirection(DcMotorSimple.Direction.REVERSE);
         //hold2.setDirection(DcMotorSimple.Direction.REVERSE);
 
     }
