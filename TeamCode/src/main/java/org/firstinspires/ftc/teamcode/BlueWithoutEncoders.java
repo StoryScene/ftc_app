@@ -232,16 +232,16 @@ public class BlueWithoutEncoders extends LinearOpMode {
                 sleep(200);
 
 
-                score.setPower(-0.5);
+                //score.setPower(-0.5);
                 telemetry.addData("Dis:", distance);
                 telemetry.addData("Code Loc:", "3");
                 telemetry.update();
                 sleep(800);
-                score.setPower(0);
+                //score.setPower(0);
                 sleep(500);
-                score.setPower(0.6);
+                //score.setPower(0.6);
                 sleep(1000);
-                score.setPower(0);
+                //score.setPower(0);
 
 
                 setPowers(-0.6, 0);
