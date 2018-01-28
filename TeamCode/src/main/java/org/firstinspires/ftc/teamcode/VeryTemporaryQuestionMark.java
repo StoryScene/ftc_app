@@ -21,7 +21,12 @@ public class VeryTemporaryQuestionMark extends OpMode {
     DcMotor intake2;
     //DcMotor hold1, hold2;
     DcMotor slide, score;
+    DcMotor relic;
+
     Servo arm;
+
+    CRServo turn;
+    CRServo grab;
 
     @Override
     public void init() {
@@ -34,11 +39,15 @@ public class VeryTemporaryQuestionMark extends OpMode {
         //hold2 = hardwareMap.dcMotor.get("hold2");
         slide = hardwareMap.dcMotor.get("slide");
         score = hardwareMap.dcMotor.get("score");
+        relic = hardwareMap.dcMotor.get("relic");
+
         arm = hardwareMap.servo.get("arm");
+        turn = hardwareMap.crservo.get("turn");
+        grab = hardwareMap.crservo.get("grab");
 
 
         rightDrive.setDirection(DcMotorSimple.Direction.REVERSE);
-        intake2.setDirection(DcMotorSimple.Direction.REVERSE);
+        //intake2.setDirection(DcMotorSimple.Direction.REVERSE);
         //hold2.setDirection(DcMotorSimple.Direction.REVERSE);
 
     }
@@ -92,6 +101,8 @@ public class VeryTemporaryQuestionMark extends OpMode {
             rightDrive.setPower(0.6);
         }
 
+        relic.setPower(gamepad1.right_trigger);
+
         slide.setPower(Range.clip(gamepad2.left_stick_y, -1, 1));
         score.setPower(Range.clip(gamepad2.right_stick_y, -0.5, 0.5));
 
@@ -101,6 +112,28 @@ public class VeryTemporaryQuestionMark extends OpMode {
         else if (gamepad2.y) {
             arm.setPosition(Range.clip(arm.getPosition() + 0.02,-1,1));
         }
+
+        if (gamepad2.a){
+            turn.setPower(.5);
+        }
+        else if (gamepad2.x){
+            turn.setPower(-.5);
+        }
+        else{
+            turn.setPower(0);
+        }
+
+        if (gamepad2.left_bumper){
+            grab.setPower(.5);
+        }
+        else if(gamepad2.right_bumper){
+            grab.setPower(-.5);
+        }
+        else{
+            grab.setPower(0);
+        }
+
+
 
 
         telemetry.addData("left stick 1", gamepad1.left_stick_y);

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.modules.GamepadV2;
@@ -26,6 +27,8 @@ public class ThreeMotors extends OpMode {
         motorTres = hardwareMap.dcMotor.get("bL");
         //servo = hardwareMap.servo.get("servo");
 
+        motorOne.setDirection(DcMotorSimple.Direction.REVERSE);
+
     }
 
     @Override
@@ -35,18 +38,9 @@ public class ThreeMotors extends OpMode {
 
         motorOne.setPower(pad1.left_stick_y_exponential(.5));
 
-        motorTwo.setPower(pad1.right_stick_y_exponential(.5));
+        motorTwo.setPower(pad1.left_stick_y_exponential(.5));
 
-        if (gamepad1.a){
-            motorTres.setPower(.3);
-        }
-
-        else if (gamepad1.b){
-            motorTres.setPower(-.25);
-        }
-        else{
-            motorTres.setPower(0);
-        }
+        motorTres.setPower(pad1.right_stick_y_exponential(.6));
 
         //if (gamepad1.left_bumper){
             //servo.setPosition(1);
