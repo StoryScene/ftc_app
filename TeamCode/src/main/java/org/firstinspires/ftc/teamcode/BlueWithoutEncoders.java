@@ -132,9 +132,6 @@ public class BlueWithoutEncoders extends LinearOpMode {
                 } else if (vu == vu.RIGHT) {
                     distance = 1400;
                 }
-                else if (state == 3) {
-                    state -= 2;
-                }
                 telemetry.addData("State: ", state);
                 telemetry.update();
             }
@@ -192,9 +189,32 @@ public class BlueWithoutEncoders extends LinearOpMode {
                     setPowers(0,0);
                 }
 
+                ArrayList vuMarkAndPos = lookForRelicImage(relicImage);
+                if (vu == RelicRecoveryVuMark.UNKNOWN) {
+                    vu = (RelicRecoveryVuMark) vuMarkAndPos.get(0);
+                }
+                float[] pos = (float[]) vuMarkAndPos.get(1);
+
+                // While only pos[2], pos[12] and pos[14] are useful.
+                // 2 is the angle  (looking to the left is positive)
+                // 12 is the distance (left/right)  (left is negative)
+                // 14 is the distance (front/back)  (away from photo is negative)
+
+                float[] usefulCoords = {pos[2], pos[12], pos[14]};
+
+                if (vu == vu.LEFT) {
+                    distance = 1000;
+                } else if (vu == vu.CENTER) {
+                    distance = 1200;
+                } else if (vu == vu.RIGHT) {
+                    distance = 1400;
+                }
+
+                telemetry.addData("State: ", state);
                 telemetry.addData("Dis: ", distance);
                 telemetry.addData("Actual powers: ", lWheel.getPower()+ " " +  rWheel.getPower());
                 telemetry.update();
+
             }
             else {
                 telemetry.addData("State: ", state);
