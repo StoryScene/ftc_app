@@ -29,7 +29,7 @@ import java.util.ArrayList;
  * Created by Emma on 01/12/18.
  */
 
-@Autonomous(name = "Bluye Without Encoders")
+@Autonomous(name = "Blue Without Encoders")
 public class BlueWithoutEncoders extends LinearOpMode {
 
 
@@ -141,10 +141,12 @@ public class BlueWithoutEncoders extends LinearOpMode {
 
                 arm.setPosition(1);
                 setPowers(0,0);
+                sleep(1000);
                 telemetry.addData("Current arm position: ", arm.getPosition());
 
                 if (color.blue()/2 < color.red()) {
                     arm.setPosition(1);
+                    sleep(1000);
                     setPowers(0,-0.8);
                     sleep(HITBALL);
                     setPowers(0,0);
@@ -166,6 +168,7 @@ public class BlueWithoutEncoders extends LinearOpMode {
 
                 if (color.blue() > color.red()/2) {
                     arm.setPosition(1);
+                    sleep(1000);
                     setPowers(0,0.8);
                     sleep(HITBALL);
                     setPowers(0,0);
@@ -191,6 +194,7 @@ public class BlueWithoutEncoders extends LinearOpMode {
 
                 arm.resetDeviceConfigurationForOpMode();
                 arm.setPosition(-1);
+                sleep(1000);
 
                 telemetry.addData("Dis: ", distance);
                 telemetry.addData("Actual powers: ", lWheel.getPower()+ " " +  rWheel.getPower());
@@ -199,6 +203,7 @@ public class BlueWithoutEncoders extends LinearOpMode {
             else {
                 arm.resetDeviceConfigurationForOpMode();
                 arm.setPosition(-1);
+                sleep(1000);
 
                 setPowers(0.6, 0);
                 sleep(distance + closer * DIFF - DRIVE_FIRST);
