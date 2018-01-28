@@ -224,7 +224,7 @@ public class AutoWithoutEncoders extends LinearOpMode {
                 telemetry.update();
                 sleep(distance + closer * DIFF - DRIVE_FIRST);
 
-                setPowers( 0, -0.8);
+                setPowers( 0, -0.5);
                 telemetry.addData("Code Loc:", "1");
                 telemetry.update();
                 sleep(ROTATE_NINETY);
