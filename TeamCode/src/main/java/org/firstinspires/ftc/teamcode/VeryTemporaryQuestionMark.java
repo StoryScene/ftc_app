@@ -21,12 +21,12 @@ public class VeryTemporaryQuestionMark extends OpMode {
     DcMotor intake2;
     //DcMotor hold1, hold2;
     DcMotor slide, score;
-    DcMotor relic;
+    //DcMotor relic;
 
     Servo arm;
 
-    CRServo turn;
-    CRServo grab;
+    //CRServo turn;
+    //CRServo grab;
 
     @Override
     public void init() {
@@ -37,13 +37,14 @@ public class VeryTemporaryQuestionMark extends OpMode {
         intake2 = hardwareMap.dcMotor.get("in2");
         //hold1 = hardwareMap.dcMotor.get("hold1");
         //hold2 = hardwareMap.dcMotor.get("hold2");
+
         slide = hardwareMap.dcMotor.get("slide");
         score = hardwareMap.dcMotor.get("score");
-        relic = hardwareMap.dcMotor.get("relic");
+        //relic = hardwareMap.dcMotor.get("relic");
 
         arm = hardwareMap.servo.get("arm");
-        turn = hardwareMap.crservo.get("turn");
-        grab = hardwareMap.crservo.get("grab");
+        //turn = hardwareMap.crservo.get("turn");
+        //grab = hardwareMap.crservo.get("grab");
 
 
         rightDrive.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -101,6 +102,7 @@ public class VeryTemporaryQuestionMark extends OpMode {
             rightDrive.setPower(0.6);
         }
 
+        /*
         if (gamepad2.dpad_up){
             relic.setPower(0.6);
         }
@@ -110,6 +112,7 @@ public class VeryTemporaryQuestionMark extends OpMode {
         else {
             relic.setPower(0);
         }
+        */
 
 
         slide.setPower(Range.clip(gamepad2.left_stick_y, -1, 1));
@@ -122,6 +125,8 @@ public class VeryTemporaryQuestionMark extends OpMode {
             arm.setPosition(Range.clip(arm.getPosition() + 0.02,-1,1));
         }
 
+        /*
+
         if (gamepad2.a){
             turn.setPower(.5);
         }
@@ -131,9 +136,11 @@ public class VeryTemporaryQuestionMark extends OpMode {
         else{
             turn.setPower(0);
         }
+        */
 
 
 
+        /*
         if (gamepad2.left_bumper){
             grab.setPower(.5);
         }
@@ -151,6 +158,7 @@ public class VeryTemporaryQuestionMark extends OpMode {
         telemetry.addData("gamepad2.a:", gamepad2.a);
         telemetry.addData("relic power:", relic.getPower());
 
+        */
 
 
         telemetry.addData("left stick 1", gamepad1.left_stick_y);
