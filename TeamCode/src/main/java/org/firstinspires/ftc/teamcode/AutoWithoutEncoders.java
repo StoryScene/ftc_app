@@ -46,7 +46,7 @@ public class AutoWithoutEncoders extends LinearOpMode {
 
     final double maxPower = 0.6;
 
-    final int HITBALL = 100, ROTATE_NINETY = 600, LAST_PUSH = 500, DRIVE_FIRST = 100;
+    final int HITBALL = 100, ROTATE_NINETY = 600, LAST_PUSH = 500, DRIVE_FIRST = 0;
 
     int closer = 0;
     final int DIFF = 2*HITBALL;
@@ -126,11 +126,11 @@ public class AutoWithoutEncoders extends LinearOpMode {
                 state += 2;
 
                 if (vu == vu.LEFT) {
-                    distance = 200;
+                    distance = 800;
                 } else if (vu == vu.CENTER) {
-                    distance = 600;
+                    distance = 700;
                 } else if (vu == vu.RIGHT) {
-                    distance = 1000;
+                    distance = 600;
                 }
                 telemetry.addData("State: ", state);
                 telemetry.update();
@@ -201,11 +201,11 @@ public class AutoWithoutEncoders extends LinearOpMode {
                 float[] usefulCoords = {pos[2], pos[12], pos[14]};
 
                 if (vu == vu.LEFT) {
-                    distance = 200;
+                    distance = 800;
                 } else if (vu == vu.CENTER) {
-                    distance = 600;
+                    distance = 700;
                 } else if (vu == vu.RIGHT) {
-                    distance = 1000;
+                    distance = 600;
                 }
 
                 telemetry.addData("State: ", state);
