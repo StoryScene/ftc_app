@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.modules.GamepadV2;
+
 /**
  * Copy pasted from a file created by Kit Caldwell on 11/10/2017.
  * :)
@@ -15,8 +17,7 @@ import com.qualcomm.robotcore.util.Range;
 @TeleOp
 public class VeryTemporaryQuestionMark extends OpMode {
 
-    DcMotor leftDrive;
-    DcMotor rightDrive;
+    DcMotor lf, rf, lb, rb;
     DcMotor intake1;
     DcMotor intake2;
     //DcMotor hold1, hold2;
@@ -25,14 +26,28 @@ public class VeryTemporaryQuestionMark extends OpMode {
 
     Servo arm;
 
+    public GamepadV2 pad1 = new GamepadV2();
     //CRServo turn;
     //CRServo grab;
 
     @Override
     public void init() {
 
-        leftDrive = hardwareMap.dcMotor.get("left");
-        rightDrive = hardwareMap.dcMotor.get("right");
+        lf = hardwareMap.dcMotor.get("lf");
+        rf = hardwareMap.dcMotor.get("rf");
+        lb = hardwareMap.dcMotor.get("lb");
+        rb = hardwareMap.dcMotor.get("rb");
+
+        lf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        lf.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rf.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        lb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         intake1 = hardwareMap.dcMotor.get("in1");
         intake2 = hardwareMap.dcMotor.get("in2");
         //hold1 = hardwareMap.dcMotor.get("hold1");
@@ -46,8 +61,6 @@ public class VeryTemporaryQuestionMark extends OpMode {
         //turn = hardwareMap.crservo.get("turn");
         //grab = hardwareMap.crservo.get("grab");
 
-
-        rightDrive.setDirection(DcMotorSimple.Direction.REVERSE);
         intake2.setDirection(DcMotorSimple.Direction.REVERSE);
         //hold2.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -56,10 +69,7 @@ public class VeryTemporaryQuestionMark extends OpMode {
     @Override
     public void loop() {
 
-
-        leftDrive.setPower(discreteDrive(gamepad1.left_stick_y));
-        rightDrive.setPower(discreteDrive(gamepad1.right_stick_y));
-
+        mechanumLoop();
 
         if (gamepad1.left_bumper){
             intake1.setPower(-.5);
@@ -90,16 +100,17 @@ public class VeryTemporaryQuestionMark extends OpMode {
         */
 
         if(gamepad1.dpad_up) {
-            leftDrive.setPower(0.6);
-            rightDrive.setPower(0.6);
+            setPowers(0,0.6,0);
         }
         else if (gamepad1.dpad_down){
-            leftDrive.setPower(-0.6);
-            rightDrive.setPower(-0.6);
+            setPowers(0,-0.6,0);
+
         }
         else if (gamepad1.dpad_left) {
-            leftDrive.setPower(-0.6);
-            rightDrive.setPower(0.6);
+            setPowers(-0.6,0,0);
+        }
+        else if (gamepad1.dpad_left) {
+            setPowers(0.6,0,0);
         }
 
         /*
@@ -185,6 +196,104 @@ public class VeryTemporaryQuestionMark extends OpMode {
             return Math.signum(x) * 0.6;
         }
         return Math.signum(x) * 1;
+    }
+
+    private void mechanumLoop() {
+        pad1.update(gamepad1);
+        double x = Range.clip(gamepad1.left_stick_x, -1, 1);
+        double y = - Range.clip(gamepad1.left_stick_y, -1, 1);
+
+        x = discreteDrive(x);
+        y = discreteDrive(y);
+
+        double rot = discreteDrive(Range.clip(gamepad1.right_stick_x, -1, 1));
+
+        double r = Math.hypot(x, y);
+        double angle = 0.0;
+
+        double POW = Math.max(Math.hypot(x, y), Math.abs(rot));
+
+
+        if (r > 0.1){
+            angle = Math.atan2(y,x) - Math.PI / 4;
+        }
+
+        telemetry.addData("angle: ", angle);
+        telemetry.addData("radius: ", r);
+        telemetry.addData("rotate: ", rot);
+
+
+        double vlf = r * Math.cos(angle) + rot;
+        double vrf = r * Math.sin(angle) - rot;
+        double vlb = r * Math.sin(angle) + rot;
+        double vrb = r * Math.cos(angle) - rot;
+
+        double maxPower = maxPow(vlf, vrf, vlb, vrb);
+
+        vlf /= maxPower;
+        vrf /= maxPower;
+        vlb /= maxPower;
+        vrb /= maxPower;
+
+        lf.setPower(Math.pow(POW,2) * Range.clip(vlf, -1, 1));
+        rf.setPower(-Math.pow(POW,2) * Range.clip(vrf, -1, 1));
+        lb.setPower(Math.pow(POW,2) * Range.clip(vlb, -1, 1));
+        rb.setPower(-Math.pow(POW,2) * Range.clip(vrb, -1, 1));
+
+
+        telemetry.addData("maxPower: ", maxPower);
+    }
+
+    private void setPowers(double xx, double yy, double rotation) {
+        double x = xx;
+        double y = - yy;
+
+        x = discreteDrive(x);
+        y = discreteDrive(y);
+
+        double rot = rotation;
+        double r = Math.hypot(x, y);
+        double angle = 0.0;
+
+        double POW = Math.max(Math.hypot(x, y), Math.abs(rot));
+
+        if (r > 0.1){
+            angle = Math.atan2(y,x) - Math.PI / 4;
+        }
+
+        telemetry.addData("angle: ", angle);
+        telemetry.addData("radius: ", r);
+        telemetry.addData("rotate: ", rot);
+
+
+        double vlf = r * Math.cos(angle) + rot;
+        double vrf = r * Math.sin(angle) - rot;
+        double vlb = r * Math.sin(angle) + rot;
+        double vrb = r * Math.cos(angle) - rot;
+
+        double maxPower = maxPow(vlf, vrf, vlb, vrb);
+
+        vlf /= maxPower;
+        vrf /= maxPower;
+        vlb /= maxPower;
+        vrb /= maxPower;
+
+        lf.setPower(Math.pow(POW,2) * Range.clip(vlf, -1, 1));
+        rf.setPower(-Math.pow(POW,2) * Range.clip(vrf, -1, 1));
+        lb.setPower(Math.pow(POW,2) * Range.clip(vlb, -1, 1));
+        rb.setPower(-Math.pow(POW,2) * Range.clip(vrb, -1, 1));
+
+
+        telemetry.addData("maxPower: ", maxPower);
+    }
+
+
+    private double maxPow(double x, double y, double z, double w) {
+        x = Math.abs(x);
+        y = Math.abs(y);
+        z = Math.abs(z);
+        w = Math.abs(w);
+        return Math.max(Math.max(x,y), Math.max(z,w));
     }
 
 }
